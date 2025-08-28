@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+@import '../../vendor/tallstackui/tallstackui/css/v4.css';
+
+@source '../views';
+@source '../../vendor/tallstackui/tallstackui/**/*.php';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@custom-variant gray (&:where(.gray, .gray *));
+
+@plugin '@tailwindcss/forms';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-primary-50: #eee7e8;
+    --color-primary-100: #decfd1;
+    --color-primary-200: #be9fa3;
+    --color-primary-300: #9d7075;
+    --color-primary-400: #7d4046;
+    /* --color-primary-500: #5d1119;  */
+    --color-primary-500: #850b16;
+    --color-primary-600: #4a0d14;
+    --color-primary-700: #370a0f;
+    --color-primary-800: #25060a;
+    --color-primary-900: #120305;
+    --color-primary-950: #090102;
+
+    
+    --color-dark-200: #e5e5e5;
+    --color-dark-300: #999999;
+    --color-dark-400: #cccccc;
+    --color-dark-500: #7f7f7f;
+    --color-dark-600: #666666;
+    --color-dark-700: #4c4c4c;
+    --color-dark-800: #323232;
+    --color-dark-900: #191919;
+
+    
+    --color-gray-500: #7f7f7f;
+    --color-gray-700: #4c4c4c;
+    --color-gray-900: #191919;
+    
+
+}
