@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @property string $name
@@ -43,6 +44,13 @@ class User extends Authenticatable
         ];
     }
 
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar
+            ? Storage::disk('public')->url($this->avatar)
+            : Storage::disk('public')->url('avatars/profile_avatar_placeholder.png');
+    }
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -76,14 +84,5 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class);
-    }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::saving(function ($user) {
-            $user->avatar = 'avatars/pFm17lP5D4pDtmnzLxOyORNjeZN6l3JZobYNnIls.png';
-        });
     }
 }

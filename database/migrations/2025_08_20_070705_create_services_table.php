@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 100);
             $table->string('description');
-            $table->string('category');
+            $table->foreignId('category_id')->constrained('service_categories');
             $table->string('code', 10);
             $table->decimal('base_price', total:10, places:2);
             $table->string('estimated_time');
@@ -32,6 +32,14 @@ return new class extends Migration
             $table->timestamps();
             $table->primary(['service_id','console_id']);
         });
+
+        Schema::create('service_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('description');
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -41,5 +49,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('console_service');
         Schema::dropIfExists('services');
+        Schema::dropIfExists('service_categories');
     }
 };

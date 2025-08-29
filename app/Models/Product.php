@@ -58,6 +58,11 @@ class Product extends Model
         return $this->belongsTo(ProductCategory::class, 'category_id');
     }
 
+    public function consoles()
+    {
+        return $this->belongsToMany(Console::class, 'product_console');
+    }
+
     public function images()
     {
         return $this->hasMany(ProductImages::class, 'product_id');

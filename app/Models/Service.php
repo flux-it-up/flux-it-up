@@ -49,6 +49,11 @@ class Service extends Model
             ->withTimestamps();
     }
 
+    public function category()
+    {
+        return $this->belongsTo(ServiceCategory::class);
+    }
+
     public function pricingTiers()
     {
         return $this->belongsToMany(PricingTier::class);

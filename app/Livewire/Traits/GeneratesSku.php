@@ -26,7 +26,7 @@ trait GeneratesSku
 
     public function generatesServiceSku()
     {
-        $category = strtoupper(substr($this->category, 0, 3));
+        $category = strtoupper(substr($this->category->name, 0, 3));
         $code = strtoupper($this->code);
         $timestamp = now()->format('ymd');
         

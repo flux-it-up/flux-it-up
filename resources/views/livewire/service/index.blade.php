@@ -5,8 +5,11 @@
         </div>
 
         <x-table :$headers :$sort :rows="$this->rows" paginate simple-pagination filter loading :quantity="[5,25,50,100]">
+            @interact('column_category', $row)
+                {{ $row->category->name }}
+            @endinteract
             @interact('column_base_price', $row)
-            ${{ $row->base_price }}
+                ${{ $row->base_price }}
             @endinteract
             @interact('column_consoles', $row)
                 @foreach($row->consoles as $console)
@@ -14,10 +17,10 @@
                 @endforeach
             @endinteract
             @interact('column_action', $row)
-            <div class="flex gap-1">
-                <x-button.circle icon="pencil" wire:click="$dispatch('load::service', { 'service' : '{{ $row->id }}'})" />
-                <livewire:service.delete :service="$row" :key="uniqid('', true)" @deleted="$refresh" />
-            </div>
+                <div class="flex gap-1">
+                    <x-button.circle icon="pencil" wire:click="$dispatch('load::service', { 'service' : '{{ $row->id }}'})" />
+                    <livewire:service.delete :service="$row" :key="uniqid('', true)" @deleted="$refresh" />
+                </div>
             @endinteract
         </x-table>
     </x-card>

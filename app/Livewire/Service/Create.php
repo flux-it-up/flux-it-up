@@ -4,6 +4,7 @@ namespace App\Livewire\Service;
 
 use App\Livewire\Traits\Alert;
 use App\Models\Service;
+use App\Models\ServiceCategory;
 use App\Models\Console;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
@@ -15,6 +16,7 @@ class Create extends Component
     use Alert, Interactions;
 
     public Service $service;
+    public $serviceCategories;
     public $consoles;
 
     public $selectedConsoles = [];
@@ -28,6 +30,7 @@ class Create extends Component
     {
         $this->service = new Service();
         $this->consoles = Console::all();
+        $this->serviceCategories = ServiceCategory::all();
         foreach($this->consoles as $console) {
             $this->priceAdjustments[$console->id] = $console->pivot->price_adjustment ?? 0;
         }
@@ -44,7 +47,7 @@ class Create extends Component
             'service.name' => ['required', 'string', 'max:255'],
             'service.description' => ['required', 'string', 'max:255'],
             'service.code' => ['required', 'string', 'max:10'],
-            'service.category' => ['required', 'string', 'max:255'],
+            'service.category_id' => ['required', 'integer'],
             'service.base_price' => ['required', 'decimal:2'],
             'service.estimated_time' => ['required', 'string', 'max:255']
         ];
@@ -62,7 +65,7 @@ class Create extends Component
 
         $this->dispatch('created');
 
-        $this->resetExcept('consoles','selectedConsoles','priceAdjustments');
+        $this->resetExcept('consoles','selectedConsoles','priceAdjustments', 'serviceCategories');
         $this->service = new Service();
 
         $this->toast()->success('Service created successfully!')->send();

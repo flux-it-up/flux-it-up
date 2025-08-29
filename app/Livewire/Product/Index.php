@@ -30,6 +30,7 @@ class Index extends Component
         ['index' => 'name', 'label' => 'Name'],
         ['index' => 'code', 'label' => 'Product Code'],
         ['index' => 'category', 'label' => 'Category'],
+        ['index' => 'consoles', 'label' => 'Consoles'],
         ['index' => 'price', 'label' => 'Price'],
         ['index' => 'cost', 'label' => 'Cost'],
         ['index' => 'quantity', 'label' => 'Quantity'],
@@ -46,7 +47,7 @@ class Index extends Component
     public function rows(): LengthAwarePaginator
     {
         return Product::query()
-            ->with('category','images')
+            ->with('category','images','consoles')
             ->when(
                 $this->search !== null, 
                 fn (Builder $query) => $query

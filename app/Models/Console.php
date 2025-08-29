@@ -30,6 +30,11 @@ class Console extends Model
             ->withTimestamps();
     }
 
+    public function products()
+    {
+        return $this->belongsToMany(Product::class);
+    }
+
     protected static function boot()
     {
         parent::boot();

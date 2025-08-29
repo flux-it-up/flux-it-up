@@ -14,8 +14,9 @@ class DatabaseSeeder extends Seeder
             AddressSeeder::class,
             StateSeeder::class,
             ConsoleSeeder::class,
-            ProductCategoriesSeeder::class,
+            ProductCategorySeeder::class,
             SalesTaxNexusThresholdsSeeder::class,
+            ServiceCategorySeeder::class,
         ]);
     }
 }

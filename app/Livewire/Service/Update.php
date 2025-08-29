@@ -4,6 +4,7 @@ namespace App\Livewire\Service;
 
 use App\Livewire\Traits\Alert;
 use App\Models\Service;
+use App\Models\ServiceCategory;
 use App\Models\Console;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
@@ -16,7 +17,7 @@ class Update extends Component
     
     public ?Service $service;
     public $consoles;
-
+    public $serviceCategories;
     public $selectedConsoles = [];
     public $console_ids = [];
     public $priceAdjustments = [];
@@ -27,6 +28,7 @@ class Update extends Component
     public function mount()
     {
         $this->consoles = Console::all();
+        $this->serviceCategories = ServiceCategory::all();
     }
 
     public function render()
@@ -57,7 +59,7 @@ class Update extends Component
             'service.name' => ['required', 'string', 'max:255'],
             'service.description' => ['required', 'string', 'max:255'],
             'service.code' => ['required', 'string', 'max:10'],
-            'service.category' => ['required', 'string', 'max:255'],
+            'service.category_id' => ['required', 'integer'],
             'service.base_price' => ['required', 'decimal:2'],
             'service.estimated_time' => ['required', 'string', 'max:255']
         ];
@@ -88,7 +90,7 @@ class Update extends Component
 
         $this->dispatch('updated');
 
-        $this->resetExcept('service', 'consoles', 'priceAdjustments', 'selectedConsoles');
+        $this->resetExcept('service', 'consoles', 'priceAdjustments', 'selectedConsoles', 'serviceCategories');
 
         $this->toast()->success('Service updated successfully!')->send();
     }

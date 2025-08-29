@@ -31,6 +31,7 @@ class Index extends Component
         ['index' => 'name', 'label' => 'Name'],
         ['index' => 'description', 'label' => 'Description'],
         ['index' => 'code', 'label' => 'Service Code'],
+        ['index' => 'category', 'label' => 'Category'],
         ['index' => 'consoles', 'label' => 'Consoles'],
         ['index' => 'base_price', 'label' => 'Base Price'],
         ['index' => 'estimated_time', 'label' => 'Estimated Time'],
@@ -47,7 +48,7 @@ class Index extends Component
     public function rows(): LengthAwarePaginator
     {
         return Service::query()
-            ->with('consoles')
+            ->with('consoles','category')
             ->when($this->search !== null, fn (Builder $query) => $query->whereAny(['name','description','code','sku'], 'like', '%'.trim($this->search).'%'))
             ->orderBy(...array_values($this->sort))
             ->paginate($this->quantity)

@@ -22,7 +22,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code',100)->unique();
+            $table->string('code',100);
             $table->text('description');
             $table->foreignId('category_id')->constrained('product_categories')->nullOnDelete();
             $table->decimal('price',10,2);
@@ -46,6 +46,12 @@ return new class extends Migration
             $table->boolean('is_primary')->default(false);
             $table->timestamps();
         });
+
+        Schema::create('product_console', function (Blueprint $table) {
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->foreignId('console_id')->constrained('consoles')->cascadeOnDelete();
+            $table->primary(['product_id','console_id']);
+        });
     }
 
     /**
@@ -53,7 +59,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_compatibility');
+        Schema::dropIfExists('product_console');
         Schema::dropIfExists('product_images');
         Schema::dropIfExists('products');
         Schema::dropIfExists('product_categories');

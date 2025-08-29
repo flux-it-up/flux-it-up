@@ -8,7 +8,7 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=asap:100,300,500&display=swap" rel="stylesheet" />
 
         <tallstackui:script />
         @livewireStyles
@@ -18,7 +18,7 @@
           x-cloak
           x-data="{ name: @js(auth()->user()->name) }"
           x-on:name-updated.window="name = $event.detail.name"
-          x-bind:class="{ 'dark bg-gray-500': darkTheme, 'bg-gray-100': !darkTheme }">
+          x-bind:class="{ 'dark bg-dark-800': darkTheme, 'bg-gray-100': !darkTheme }">
     <x-layout>
         <x-slot:top>
             <x-dialog />
@@ -34,7 +34,7 @@
                         <x-slot:action>
                             <div>
                                 <button class="cursor-pointer" x-on:click="show = !show">
-                                    <img src="{{ Storage::url(auth()->user()->avatar) }}" class="inline rounded-full size-10 mx-3 " /><span class="text-base font-semibold text-primary-500" x-text="name"></span>
+                                    <img src="{{ asset(auth()->user()->avatar_url) }}" class="inline rounded-full size-10 mx-3 " /><span class="text-base font-semibold text-primary-500" x-text="name"></span>
                                 </button>
                             </div>
                         </x-slot:action>

@@ -16,6 +16,9 @@
                 <x-select.styled label="{{ __('Category') }} *" placeholder="Choose category..." wire:model="product.category_id" search :options="$productCategories" select="label:name|value:id" />
             </div>
             <div>
+                <x-select.styled label="{{ __('Consoles') }} *" placeholder="Choose consoles..." wire:model="selectedConsoles" search multiple :options="$consoles" select="label:name|value:id" />
+            </div>
+            <div>
                 <x-number label="{{ __('Price') }} *" prefix="$" wire:model="product.price" step="0.01" required/>
             </div>
             <div>

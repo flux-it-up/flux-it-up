@@ -8,7 +8,7 @@
                 <x-input label="{{ __('Description') }} *" wire:model="service.description" required />
             </div>
             <div>
-                <x-select.styled label="{{ __('Category') }} *" placeholder="Choose category..." wire:model="service.category" search :options="[['value' => 'cleaning', 'label' => 'Cleaning'],['value' => 'diagnostic', 'label' => 'Diagnostic'],['value' => 'maintenance', 'label' => 'Maintenance'],['value' => 'repair', 'label' => 'Repair'],['value' => 'upgrade', 'label' => 'Upgrade']]" />
+                <x-select.styled label="{{ __('Category') }} *" placeholder="Choose category..." wire:model="service.category_id" search :options="$serviceCategories" select="label:name|value:id" />
             </div>
             <div>
                 <x-input label="{{ __('Service Code') }} *" placeholder="e.g. SCR, HDR, BTR..." wire:model="service.code" required />

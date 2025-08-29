@@ -5,6 +5,7 @@ namespace App\Livewire\Product;
 use App\Livewire\Traits\Alert;
 use App\Models\ProductCategory;
 use App\Models\Product;
+use App\Models\Console;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -15,6 +16,10 @@ class Create extends Component
 
     public Product $product;
     public $productCategories;
+    public $consoles;
+
+    public $selectedConsoles = [];
+    public $console_ids = [];
 
     public bool $modal = false;
 
@@ -22,6 +27,7 @@ class Create extends Component
     {
         $this->product = new Product();
         $this->productCategories = ProductCategory::all();
+        $this->consoles = Console::all();
     }
 
     public function rules(): array
@@ -47,9 +53,11 @@ class Create extends Component
 
         $this->product->save();
 
+        $this->product->consoles()->sync($this->selectedConsoles);
+
         $this->dispatch('created');
 
-        $this->resetExcept('product','productCategories');
+        $this->resetExcept('product','productCategories', 'consoles','selectedConsoles',);
         $this->product = new Product();
 
         $this->toast()->success('Product created successfully!')->send();

@@ -5,6 +5,7 @@ namespace App\Livewire\Product;
 use App\Livewire\Traits\Alert;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\Console;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
@@ -17,12 +18,17 @@ class Update extends Component
 
     public ?Product $product;
     public $productCategories;
+    public $consoles;
+
+    public $selectedConsoles = [];
+    public $console_ids = [];
 
     public bool $modal = false;
 
     public function mount(): void
     {
         $this->productCategories = ProductCategory::all();
+        $this->consoles = Console::all();
     }
 
     public function rules(): array
@@ -47,6 +53,8 @@ class Update extends Component
     {
         $this->product = $product;
 
+        $this->selectedConsoles = $this->product->consoles->pluck('id')->toArray();
+
         $this->modal = true;
     }
 
@@ -61,9 +69,11 @@ class Update extends Component
 
         $this->product->save();
 
+        $this->product->consoles()->sync($this->selectedConsoles);
+
         $this->dispatch('updated');
 
-        $this->resetExcept('product', 'productCategories');
+        $this->resetExcept('product', 'productCategories', 'consoles','selectedConsoles',);
 
         $this->toast()->success('Product updated successfully!')->send();
     }
