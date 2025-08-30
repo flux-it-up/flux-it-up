@@ -51,12 +51,14 @@
               </x-badge>
             @endinteract
             @interact('column_technician', $row)
-                {{ $row->technician->name }}
+                @if($row->technician)
+                    {{ $row->technician->name }}
+                @endif
             @endinteract
             @interact('column_action', $row)
                 <div class="flex gap-1">
-                    {{-- <x-button.circle icon="pencil" wire:click="$dispatch('load::service', { 'service' : '{{ $row->id }}'})" />
-                    <livewire:repair-request.delete :service="$row" :key="uniqid('', true)" @deleted="$refresh" /> --}}
+                    <x-button.circle icon="pencil" wire:click="$dispatch('load::repair', { 'repair' : '{{ $row->id }}'})" />
+                    <livewire:repair-request.delete :repair="$row" :key="uniqid('', true)" @deleted="$refresh" />
                 </div>
             @endinteract
         </x-table>

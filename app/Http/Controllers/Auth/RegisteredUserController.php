@@ -32,6 +32,9 @@ class RegisteredUserController
             'password' => Hash::make($request->password),
         ]);
 
+        // 🔑 Assign default role
+        $user->assignRole('customer');
+
         event(new Registered($user));
 
         Auth::login($user);

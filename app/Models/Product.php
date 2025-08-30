@@ -55,7 +55,7 @@ class Product extends Model
 
     public function category()
     {
-        return $this->belongsTo(ProductCategory::class, 'category_id');
+        return $this->belongsTo(ProductCategory::class);
     }
 
     public function consoles()
@@ -65,11 +65,11 @@ class Product extends Model
 
     public function images()
     {
-        return $this->hasMany(ProductImages::class, 'product_id');
+        return $this->hasMany(ProductImages::class);
     }
 
     public function orderItems()
     {
-        return $this->hasMany(OrderItem::class, 'product_id');
+        return $this->hasMany(OrderItem::class);
     }
 }
