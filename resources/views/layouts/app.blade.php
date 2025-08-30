@@ -61,6 +61,7 @@
                 {{-- <x-side-bar.item text="Pricing Tiers" icon="tag" :route="route('pricing-tiers.index')" /> --}}
                 <x-side-bar.item text="Products" icon="list-bullet" :route="route('products.index')" />
                 <x-side-bar.item text="Orders" icon="clipboard-document-list" :route="route('orders.index')" />
+                <x-side-bar.item text="Repair Requests" icon="wrench-screwdriver" :route="route('repairs.index')" />
                 <x-side-bar.item text="Welcome Page" icon="arrow-uturn-left" :route="route('welcome')" />
             </x-side-bar>
         </x-slot:menu>

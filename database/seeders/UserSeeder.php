@@ -16,7 +16,14 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'Nathon Scott',
             'email' => 'test@example.com',
-            'phone' => '8702923154'
+            'phone' => '8702923154',
+            'avatar' => 'avatars/mdCtYmyIvfXbeeNKtUfaAK5qf2RIflWKzxRlMkI6.jpg',
         ]);
+
+        $user = User::find(1);
+
+        if($user) {
+            $user->assignRole('super-admin');
+        }
     }
 }

@@ -39,16 +39,6 @@ class Order extends Model
         ];
     }
 
-    public function items()
-    {
-        return $this->hasMany(OrderItem::class, 'order_id');
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     protected static function boot()
     {
         parent::boot();
@@ -56,5 +46,20 @@ class Order extends Model
         static::creating(function($order) {
             $order->order_number = 'ORD-'.now()->format('Ymd').'-'.Str::uuid();
         });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id');
+    }
+
+    public function repairRequests()
+    {
+        return $this->hasMany(RepairRequest::class, 'order_id');
     }
 }

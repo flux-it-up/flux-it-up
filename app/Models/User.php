@@ -51,11 +51,6 @@ class User extends Authenticatable
             : Storage::disk('public')->url('avatars/profile_avatar_placeholder.png');
     }
 
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
-
     public function addresses()
     {
         return $this->hasMany(Address::class);
