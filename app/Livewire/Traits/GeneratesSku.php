@@ -42,7 +42,7 @@ trait GeneratesSku
     {
         $serviceCode = strtoupper($this->code);
         $consoleCode = strtoupper($console->code);
-        $category = strtoupper(substr($this->category, 0, 3));
+        $category = strtoupper(substr($this->category->name, 0, 3));
         $timestamp = now()->format('ymd');
         
         $baseSku = "SRV-{$category}-{$serviceCode}-{$consoleCode}-{$timestamp}";
