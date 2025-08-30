@@ -12,7 +12,7 @@ use App\Livewire\Product\ManageImages as ProductImages;
 use App\Livewire\Order\Index as OrderIndex;
 use App\Livewire\RepairRequest\Index as RepairIndex;
 
-Route::view('/', 'welcome')->name('welcome');
+Route::view('/', 'livewire.home')->name('welcome');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/user', UserIndex::class)->name('user.index');
