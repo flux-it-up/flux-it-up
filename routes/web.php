@@ -11,29 +11,29 @@ use App\Livewire\Product\Index as ProductIndex;
 use App\Livewire\Product\ManageImages as ProductImages;
 use App\Livewire\Order\Index as OrderIndex;
 use App\Livewire\RepairRequest\Index as RepairIndex;
+use App\Livewire\Home;
+use App\Livewire\About;
+use App\Livewire\Service;
 
-Route::view('/', 'livewire.home')->name('welcome');
+Route::get('/', Home::class)->name('welcome');
+Route::get('/about', About::class)->name('about');
+Route::get('/services', Service::class)->name('services');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/user', UserIndex::class)->name('user.index');
 
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::prefix('admin')->group(function () {
 
-    Route::get('/users', UsersIndex::class)->name('users.index');
-
-    Route::get('/consoles', ConsoleIndex::class)->name('consoles.index');
-
-    Route::get('/services', ServiceIndex::class)->name('services.index');
-
-    Route::get('/pricingtiers', PricingTierIndex::class)->name('pricing-tiers.index');
-
-    Route::get('/products', ProductIndex::class)->name('products.index');
-
-    Route::get('/product/images/{product}', ProductImages::class)->name('product.images');
-
-    Route::get('/orders', OrderIndex::class)->name('orders.index');
-
-    Route::get('/repair-requests', RepairIndex::class)->name('repairs.index');
+        Route::view('/dashboard', 'dashboard')->name('dashboard')->middleware(['can:view dashboard']);
+        Route::get('/users', UsersIndex::class)->name('users.index');
+        Route::get('/consoles', ConsoleIndex::class)->name('consoles.index');
+        Route::get('/services', ServiceIndex::class)->name('services.index');
+        Route::get('/pricingtiers', PricingTierIndex::class)->name('pricing-tiers.index');
+        Route::get('/products', ProductIndex::class)->name('products.index');
+        Route::get('/product/images/{product}', ProductImages::class)->name('product.images');
+        Route::get('/orders', OrderIndex::class)->name('orders.index');
+        Route::get('/repair-requests', RepairIndex::class)->name('repairs.index');
+    });
 });
 
 require __DIR__.'/auth.php';

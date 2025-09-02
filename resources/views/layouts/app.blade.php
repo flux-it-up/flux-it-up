@@ -29,12 +29,19 @@
                 <x-slot:left>
                     <x-theme-switch />
                 </x-slot:left>
+                <x-slot:middle>
+                    <img src="{{ asset(auth()->user()->avatar_url) }}" class="inline rounded-full size-10 mx-3 " /><span class="text-base font-semibold text-dark-300" x-text="name"></span>
+                </x-slot:middle>
                 <x-slot:right>
                     <x-dropdown>
                         <x-slot:action>
                             <div>
-                                <button class="cursor-pointer" x-on:click="show = !show">
-                                    <img src="{{ asset(auth()->user()->avatar_url) }}" class="inline rounded-full size-10 mx-3 " /><span class="text-base font-semibold text-primary-500" x-text="name"></span>
+                                <button class="text-primary-500 cursor-pointer" x-on:click="show = !show">
+                                    <x-icon class="h-6 w-6" name="cog">
+                                        <x-slot:right>
+                                            Settings
+                                        </x-slot:right>
+                                    </x-icon>
                                 </button>
                             </div>
                         </x-slot:action>
