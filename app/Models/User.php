@@ -24,9 +24,12 @@ class User extends Authenticatable
     use HasFactory, Notifiable, SoftDeletes, HasRoles;
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'middle_name',
+        'last_name',
         'email',
         'password',
+        'dob',
         'phone',
         'avatar'
     ];
@@ -41,6 +44,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'dob' => 'date:Y-m-d',
         ];
     }
 
@@ -49,6 +53,11 @@ class User extends Authenticatable
         return $this->avatar
             ? Storage::disk('public')->url($this->avatar)
             : Storage::disk('public')->url('avatars/profile_avatar_placeholder.png');
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->first_name.' '.$this->middle_name.' '.$this->last_name;
     }
 
     public function addresses()

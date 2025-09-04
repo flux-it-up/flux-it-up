@@ -20,6 +20,10 @@ return new class extends Migration
             $table->decimal('base_price', total:10, places:2);
             $table->string('estimated_time');
             $table->string('sku')->unique();
+            $table->text('requirements')->nullable();
+            $table->text('what_included')->nullable();
+            $table->boolean('requires_diagnostics')->default(false);
+            $table->decimal('diagnostic_fee', 10, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

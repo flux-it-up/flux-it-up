@@ -4,10 +4,19 @@
     <x-modal :title="__('Update Profile')" wire x-on:open="setTimeout(() => $refs.name.focus(), 250)">
         <form id="update-profile" wire:submit="save" class="space-y-4">
             <div>
-                <x-input label="{{ __('Name') }} *" wire:model="user.name" required />
+                <x-input label="{{ __('First Name') }} *" wire:model="user.first_name" required />
+            </div>
+            <div>
+                <x-input label="{{ __('Middle Name') }}" wire:model="user.middle_name" />
+            </div>
+            <div>
+                <x-input label="{{ __('Last Name') }} *" wire:model="user.last_name" required />
             </div>
             <div>
                 <x-input label="{{ __('Email') }} *" value="{{ $user->email }}" disabled />
+            </div>
+            <div>
+                <x-date label="{{ __('Date of Birth') }} *" wire:model="user.dob" required />
             </div>
             <div>
                 <x-input label="{{ __('Phone') }} *" wire:model="user.phone" />

@@ -16,7 +16,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('brand', 100);
             $table->string('model', 100);
+            $table->string('model_number');
             $table->string('code', 10);
+            $table->year('release_year')->nullable();
+            $table->string('image')->nullable();
+            $table->json('specifications')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
