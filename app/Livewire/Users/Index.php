@@ -42,7 +42,7 @@ class Index extends Component
     {
         return User::query()
             ->whereNotIn('id', [Auth::id()])
-            ->when($this->search !== null, fn (Builder $query) => $query->whereAny(['name', 'email'], 'like', '%'.trim($this->search).'%'))
+            ->when($this->search !== null, fn (Builder $query) => $query->whereAny(['first_name', 'middle_name', 'last_name', 'phone', 'dob', 'email'], 'like', '%'.trim($this->search).'%'))
             ->orderBy(...array_values($this->sort))
             ->paginate($this->quantity)
             ->withQueryString();

@@ -2,13 +2,23 @@
     <x-modal :title="__('Update User: #:id', ['id' => $user?->id])" wire>
         <form id="user-update-{{ $user?->id }}" wire:submit="save" class="space-y-4">
             <div>
-                <x-input label="{{ __('Name') }} *" wire:model="user.name" required />
+                <x-input label="{{ __('First Name') }} *" wire:model="user.first_name" required />
             </div>
-
+            <div>
+                <x-input label="{{ __('Middle Name') }}" wire:model="user.middle_name" />
+            </div>
+            <div>
+                <x-input label="{{ __('Last Name') }} *" wire:model="user.last_name" required />
+            </div>
             <div>
                 <x-input label="{{ __('Email') }} *" wire:model="user.email" required />
             </div>
-
+            <div>
+                <x-date label="{{ __('Date of Birth') }} *" wire:model="user.dob" required />
+            </div>
+            <div>
+                <x-input label="{{ __('Phone') }} *" wire:model="user.phone" />
+            </div>
             <div>
                 <x-password :label="__('Password')"
                             hint="The password will only be updated if you set the value of this field"

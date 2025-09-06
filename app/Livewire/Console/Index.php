@@ -28,8 +28,11 @@ class Index extends Component
 
     public array $headers = [
         ['index' => 'id', 'label' => '#'],
+        ['index' => 'image', 'label' => 'Image'],
         ['index' => 'brand', 'label' => 'Brand'],
         ['index' => 'model', 'label' => 'Model'],
+        ['index' => 'model_number', 'label' => 'Model Number'],
+        ['index' => 'release_year', 'label' => 'Release Year'],
         ['index' => 'code', 'label' => 'Code'],
         ['index' => 'action', 'sortable' => false],
     ];
@@ -38,7 +41,7 @@ class Index extends Component
     public function rows(): LengthAwarePaginator
     {
         return Console::query()
-            ->when($this->search !== null, fn (Builder $query) => $query->whereAny(['brand', 'model'], 'like', '%'.trim($this->search).'%'))
+            ->when($this->search !== null, fn (Builder $query) => $query->whereAny(['brand', 'model', 'model_number', 'release_year'], 'like', '%'.trim($this->search).'%'))
             ->orderBy(...array_values($this->sort))
             ->paginate($this->quantity)
             ->withQueryString();

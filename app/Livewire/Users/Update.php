@@ -37,7 +37,17 @@ class Update extends Component
     public function rules(): array
     {
         return [
-            'user.name' => [
+            'user.first_name' => [
+                'required',
+                'string',
+                'max:255'
+            ],
+            'user.middle_name' => [
+                'nullable',
+                'string',
+                'max:255'
+            ],
+            'user.last_name' => [
                 'required',
                 'string',
                 'max:255'
@@ -54,7 +64,16 @@ class Update extends Component
                 'string',
                 'min:8',
                 'confirmed'
-            ]
+            ],
+            'user.phone' => [
+                'nullable',
+                'numeric',
+                'digits:10'
+            ],
+            'user.dob' => [
+                'nullable',
+                'date'
+            ],
         ];
     }
 

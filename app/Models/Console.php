@@ -16,6 +16,10 @@ class Console extends Model
     protected $fillable = [
         'brand',
         'model',
+        'model_number',
+        'release_year',
+        'image',
+        'specifications',
         'code'
     ];
 
