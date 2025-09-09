@@ -39,6 +39,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected  $appends = ['name'];
+
     protected function casts(): array
     {
         return [
@@ -46,6 +48,15 @@ class User extends Authenticatable
             'password' => 'hashed',
             'dob' => 'date:Y-m-d',
         ];
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($user) {
+            $user->assignRole('customer');
+        });
     }
 
     public function getAvatarUrlAttribute()

@@ -23,6 +23,36 @@ class UserSeeder extends Seeder
             'avatar' => 'avatars/mdCtYmyIvfXbeeNKtUfaAK5qf2RIflWKzxRlMkI6.jpg',
         ]);
 
+        User::factory()->create([
+            'first_name' => 'Elmer',
+            'middle_name' => '',
+            'last_name' => 'Massey',
+            'email' => 'test2@example.com',
+            'phone' => '8709381611',
+            'dob' => '1987/03/29',
+            'avatar' => '',
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'Debbie',
+            'middle_name' => '',
+            'last_name' => 'Massey',
+            'email' => 'test3@example.com',
+            'phone' => '8709383389',
+            'dob' => '1987/03/29',
+            'avatar' => '',
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'Brandon',
+            'middle_name' => '',
+            'last_name' => 'Yoh',
+            'email' => 'test4@example.com',
+            'phone' => '8709381611',
+            'dob' => '2003/01/04',
+            'avatar' => '',
+        ]);
+
         $user = User::find(1);
 
         if($user) {

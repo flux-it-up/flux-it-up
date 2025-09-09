@@ -13,25 +13,29 @@ return [
     'roles' => [
 
         'customer' => [
+            'view dashboard',
             'create orders',
             'view orders',
             'create repair',
             'view repair',
             'manage profile',
             'make payment',
+            'view products',
         ],
 
         'technician' => [
-            'view repair',
             'update repair',
-            'assign repair',
+            'view users',
+            'manage site',
         ],
 
         'support' => [
-            'view orders',
-            'update orders',
             'respond tickets',
             'refund payments',
+            'update repair',
+            'assign repair',
+            'assign orders',
+            'manage site',
         ],
 
         'manager' => [
@@ -41,6 +45,9 @@ return [
             'view reports',
             'view users',
             'update users',
+            'refund payments',
+            'respond tickets',
+            'manage site',
         ],
 
         'admin' => '*', // all permissions
@@ -61,6 +68,7 @@ return [
         'view dashboard',
         'view reports',
         'access settings',
+        'manage site',
 
         // Orders
         'create orders',

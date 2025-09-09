@@ -35,6 +35,7 @@
                 <x-slot:right>
                     <x-dropdown>
                         <x-slot:action>
+                            @can('manage profile')
                             <div>
                                 <button class="text-primary-500 cursor-pointer" x-on:click="show = !show">
                                     <x-icon class="h-6 w-6" name="cog">
@@ -44,10 +45,11 @@
                                     </x-icon>
                                 </button>
                             </div>
+                            @endcan
                         </x-slot:action>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <x-dropdown.items :text="__('Profile')" :href="route('user.index')" />
+                            <x-dropdown.items :text="__('Profile')" :href="route('profile.index')" />
                             <x-dropdown.items :text="__('Logout')" onclick="event.preventDefault(); this.closest('form').submit();" separator />
                         </form>
                     </x-dropdown>
@@ -61,15 +63,36 @@
                         <img src="{{ asset('/assets/images/fluxituplogosmall.png') }}" width="40" height="40" />
                     </div>
                 </x-slot:brand>
-                <x-side-bar.item text="Dashboard" icon="home" :route="route('dashboard')" />
-                <x-side-bar.item text="Users" icon="users" :route="route('users.index')" />
-                <x-side-bar.item text="Consoles" icon="server" :route="route('consoles.index')" />
-                <x-side-bar.item text="Services" icon="clipboard" :route="route('services.index')" />
-                {{-- <x-side-bar.item text="Pricing Tiers" icon="tag" :route="route('pricing-tiers.index')" /> --}}
-                <x-side-bar.item text="Products" icon="list-bullet" :route="route('products.index')" />
-                <x-side-bar.item text="Orders" icon="clipboard-document-list" :route="route('orders.index')" />
-                <x-side-bar.item text="Repair Requests" icon="wrench-screwdriver" :route="route('repairs.index')" />
-                <x-side-bar.item text="Welcome Page" icon="arrow-uturn-left" :route="route('welcome')" />
+                <x-side-bar.separator text="{{ __('General Navigation') }}" line />
+                @hasrole('customer')
+                    <x-side-bar.item text="{{ __('Home Page') }}" icon="arrow-uturn-left" :route="route('welcome')" />
+                    <x-side-bar.item text="{{ __('My Orders') }}" icon="clipboard-document-list" :route="route('welcome')" />
+                @endhasrole
+                @hasrole('technician|support|manager|admin|super-admin')
+                    <x-side-bar.separator text="{{ __('Administration') }}" line />
+                    @can('view dashboard')
+                        <x-side-bar.item text="{{ __('Dashboard') }}" icon="home" :route="route('dashboard')" />
+                    @endcan
+                    @can('view users')
+                        <x-side-bar.item text="{{ __('Users') }}" icon="users" :route="route('users.index')" />
+                    @endcan
+                    @can('manage site')
+                        <x-side-bar.item text="{{ __('Consoles') }}" icon="server" :route="route('consoles.index')" />
+                        <x-side-bar.item text="{{ __('Services') }}" icon="clipboard" :route="route('services.index')" />
+                    @endcan
+                    {{-- @can('view dashboard')
+                        <x-side-bar.item text="{{ __('Pricing Tiers') }}" icon="tag" :route="route('pricing-tiers.index')" /> 
+                    @endcan--}}
+                    @can('view products')
+                        <x-side-bar.item text="{{ __('Products') }}" icon="list-bullet" :route="route('products.index')" />
+                    @endcan
+                    @can('view orders')
+                        <x-side-bar.item text="{{ __('Orders') }}" icon="clipboard-document-list" :route="route('orders.index')" />
+                    @endcan
+                    @can('view dashboard')
+                        <x-side-bar.item text="{{ __('Repair Requests') }}" icon="wrench-screwdriver" :route="route('repairs.index')" />
+                    @endcan
+                @endhasrole
             </x-side-bar>
         </x-slot:menu>
         {{ $slot }}

@@ -42,12 +42,24 @@
             </div>
 
             {{-- User Links --}}
-            <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-                @hasrole('admin|super-admin')
-                    <a href="{{ route('dashboard') }}" class="text-sm font-semibold text-white">Dashboard →</a>
-                @else
+            <div class="hidden lg:flex lg:flex-1 lg:justify-end space-x-4">
+                @guest
+                    {{-- Guest users (not logged in) --}}
                     <a href="{{ route('login') }}" class="text-sm font-semibold text-white">Log in →</a>
-                @endhasrole
+                @else
+                    {{-- Authenticated users --}}
+                    @can('view dashboard')
+                        <a href="{{ route('dashboard') }}" class="text-sm font-semibold text-white">Dashboard →</a>
+                    @else
+                        <a href="{{ route('logout') }}" class="text-sm font-semibold text-white"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Logout →
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                        </form>
+                    @endhasrole
+                @endguest
             </div>
 
             {{-- Mobile menu button --}}
@@ -86,11 +98,11 @@
                                     <a href="{{ route('services') }}" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-white/5">Services</a>
                                 </div>
                                 <div class="py-6">
-                                    @hasrole('admin|super-admin')
+                                    @can('view dashboard')
                                         <a href="{{ route('dashboard') }}" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-white/5">Dashboard</a>
                                     @else
                                         <a href="{{ route('login') }}" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-white/5">Log in</a>
-                                    @endhasrole
+                                    @endcan
                                 </div>
                             </div>
                         </div>
