@@ -4,7 +4,7 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
-        "watch:blade": "chokidar 'resources/views/**/*.blade.php' 'app/Http/Livewire/**/*.php' -c 'php artisan view:clear && php artisan cache:clear && php artisan route:clear'",
+        "watch:blade": "chokidar \"resources/views/**/*.blade.php\" \"app/Http/Livewire/**/*.php\" -c \"php artisan cache:clear && php artisan route:clear\"",
         "dev:full": "concurrently \"npm run dev\" \"npm run watch:blade\""
     },
     "dependencies": {

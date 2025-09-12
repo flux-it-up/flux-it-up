@@ -15,26 +15,52 @@ use App\Livewire\Admin\RepairRequest\Index as RepairIndex;
 use App\Livewire\Frontend\Home;
 use App\Livewire\Frontend\About;
 use App\Livewire\Frontend\Services;
+use App\Livewire\Frontend\Products\Index as ProductsIndex;
+use App\Livewire\Frontend\Products\CategoryPage as ProductsCategory;
+use App\Livewire\Frontend\Products\ProductPage;
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', Profile::class)->name('profile.index');
 
     Route::prefix('admin')->group(function () {
-
-        Route::get('/dashboard', Dashboard::class)->name('dashboard')->middleware(['can:view dashboard']);
-        Route::get('/users', UsersIndex::class)->name('users.index')->middleware(['can:view users']);
-        Route::get('/consoles', ConsoleIndex::class)->name('consoles.index')->middleware(['can:manage site']);
-        Route::get('/repairservices', ServiceIndex::class)->name('services.index')->middleware(['can:manage site']);
-        Route::get('/pricingtiers', PricingTierIndex::class)->name('pricing-tiers.index')->middleware(['can:manage site']);
-        Route::get('/products', ProductIndex::class)->name('products.index')->middleware(['can:manage site']);
-        Route::get('/product/images/{product}', ProductImages::class)->name('product.images')->middleware(['can:manage site']);
-        Route::get('/orders', OrderIndex::class)->name('orders.index')->middleware(['can:view dashboard']);
-        Route::get('/repair-requests', RepairIndex::class)->name('repairs.index')->middleware(['can:view dashboard']);
+        Route::get('/dashboard', Dashboard::class)->name('dashboard');
+        Route::prefix('users')->group(function() {
+            Route::get('/', UsersIndex::class)->name('users.index');
+        });
+        Route::prefix('consoles')->group(function() {
+            Route::get('/', ConsoleIndex::class)->name('consoles.index');
+        });
+        Route::prefix('repairservices')->group(function() {
+            Route::get('/', ServiceIndex::class)->name('services.index');
+        });
+        Route::prefix('pricingtiers')->group(function() {
+            Route::get('/', PricingTierIndex::class)->name('pricing-tiers.index');
+        });
+        Route::prefix('products')->group(function() {
+            Route::get('/', ProductIndex::class)->name('products.index');
+            Route::get('/images/{product}', ProductImages::class)->name('product.images');
+        });
+        Route::prefix('orders')->group(function() {
+            Route::get('/', OrderIndex::class)->name('orders.index');
+        });
+        Route::prefix('repair-requests')->group(function() {
+            Route::get('/', RepairIndex::class)->name('repairs.index');
+        });
+        
     });
 });
 
 Route::get('/', Home::class)->name('welcome');
 Route::get('/about', About::class)->name('about');
 Route::get('/services', Services::class)->name('services');
+Route::prefix('products')->group(function() {
+    Route::get('/', ProductsIndex::class)->name('products');
+    Route::prefix('{category:slug}')->group(function() {
+        Route::get('/', ProductsCategory::class)->name('products.category');
+        Route::get('/{product:slug}', ProductPage::class)->name('products.show');
+    });
+});
+
 
 require __DIR__.'/auth.php';

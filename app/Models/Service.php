@@ -44,7 +44,7 @@ class Service extends Model
 
     public function consoles()
     {
-        return $this->belongsToMany(Console::class)
+        return $this->belongsToMany(Console::class, 'console_service', 'service_id', 'console_id')
             ->withPivot(['price_adjustment','sku'])
             ->withTimestamps();
     }
@@ -57,5 +57,15 @@ class Service extends Model
     public function pricingTiers()
     {
         return $this->belongsToMany(PricingTier::class);
+    }
+
+    public function scopeByConsole($query, $console)
+    {
+        return $query->whereHas('consoles', fn($q) => $q->whereIn('console_id', $console));
+    }
+
+    public function scopeByCategory($query, $category)
+    {
+        return $query->whereHas('category', fn($q) => $q->whereIn('category_id', $category));
     }
 }

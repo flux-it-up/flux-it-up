@@ -13,6 +13,6 @@ class ServiceCategory extends Model
 
     public function service()
     {
-        return $this->hasOne(Service::class);
+        return $this->hasMany(Service::class, 'category_id');
     }
 }

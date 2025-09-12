@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Console;
 
 use App\Livewire\Traits\Alert;
 use App\Models\Console;
+use App\Models\ConsoleBrand;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -15,6 +16,7 @@ class Create extends Component
     use Alert, WithFileUploads;
 
     public Console $console;
+    public $brands;
     public $image, $newImage, $years;
 
     public bool $modal = false;
@@ -22,6 +24,7 @@ class Create extends Component
     public function mount(): void
     {
         $this->console = new Console();
+        $this->brands = ConsoleBrand::all();
         $this->image = $this->console->image;
         $this->years = range(date('Y'),1970);
     }
@@ -34,9 +37,9 @@ class Create extends Component
     public function rules(): array
     {
         return [
-            'console.brand' => [
+            'console.brand_id' => [
                 'required',
-                'string',
+                'integer',
                 'max:255'
             ],
             'console.model' => [

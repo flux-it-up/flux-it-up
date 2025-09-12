@@ -30,3 +30,4 @@ Homestead.json
 auth.json
 fluxitup.code-workspace
 fluxitup3.code-workspace
+*.csv

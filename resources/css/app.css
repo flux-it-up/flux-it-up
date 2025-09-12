@@ -44,3 +44,12 @@
     
 
 }
+
+.game-console-repair {
+    background-image: url(http://flux-it-up.local/assets/images/repair-image.jpg);
+    background-size: cover;
+}
+
+.game-console-repair-blur {
+    backdrop-filter: blur(14px);
+}

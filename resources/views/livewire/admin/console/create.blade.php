@@ -4,7 +4,7 @@
     <x-modal :title="__('Add New Console')" wire x-on:open="setTimeout(() => $refs.name.focus(), 250)">
         <form id="console-create" wire:submit="save" class="space-y-4">
             <div>
-                <x-select.styled wire:model="console.brand" :options="['PlayStation','Xbox','Nintendo']" label="{{__('Brand') }} *" placeholder="Choose Brand..." required autofocus autocomplete="brand" />
+                <x-select.styled label="{{__('Brand') }} *" wire:model="console.brand" :options="$brands"  select="label:name|value:id" placeholder="Choose Brand..." required autofocus autocomplete="brand" />
             </div>
             <div>
                 <x-input label="{{ __('Model') }} *" wire:model="console.model" />

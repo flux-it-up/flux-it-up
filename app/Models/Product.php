@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 use App\Livewire\Traits\GeneratesSku;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -51,6 +52,11 @@ class Product extends Model
         $primaryImage = $this->images->firstWhere('is_primary', true);
 
         return $primaryImage ? $primaryImage->image_url : 'products/placeholder.png';
+    }
+
+    public function getSlugAttribute()
+    {
+        return Str::slug($this->name, '-');
     }
 
     public function category()

@@ -8,6 +8,9 @@
             @interact('column_image', $row)
                 <img src="{{ $row->image ? Storage::url($row->image) : Storage::url('consoles/placeholder.png') }}" class="mt-4 w-18 h-18 mb-2" />
             @endinteract
+            @interact('column_brand', $row)
+                {{ $row->brand->name }}
+            @endinteract
             @interact('column_action', $row)
             <div class="flex gap-1">
                 <x-button.circle icon="pencil" wire:click="$dispatch('load::console', { 'console' : '{{ $row->id }}'})" />

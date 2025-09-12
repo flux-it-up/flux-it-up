@@ -2,7 +2,7 @@
     <x-modal :title="__('Update Console: #:id', ['id' => $console?->id])" wire>
         <form id="console-update-{{ $console?->id }}" wire:submit="save" class="space-y-4">
             <div>
-                <x-select.styled wire:model="console.brand" :options="['PlayStation','Xbox','Nintendo']" label="Brand *" placeholder="Choose Brand..." required autofocus autocomplete="brand" />
+                <x-select.styled label="{{ __('Brand') }} *" wire:model="console.brand_id" :options="$brands"  select="label:name|value:id" placeholder="Choose Brand..." required autofocus autocomplete="brand" />
             </div>
             <div>
                 <x-input label="{{ __('Model') }} *" wire:model="console.model" />

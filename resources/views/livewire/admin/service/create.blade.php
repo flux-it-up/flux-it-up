@@ -26,9 +26,9 @@
                 @foreach($consoles as $console)
                     <div class="flex items-center space-x-4 m-2 p-3 border rounded-lg">
                         <x-checkbox wire:model.live="selectedConsoles" color="red" value="{{ $console->id }}" label="{{ $console->name }} ({{ $console->code }})" />
-                        @if(in_array($console->id, $selectedConsoles))
+                        {{-- @if(in_array($console->id, $selectedConsoles))
                             <x-number wire:model="priceAdjustments.{{ $console->id }}" label="Price Adjustment ($)" step="5" class="w-32" />
-                        @endif
+                        @endif --}}
                     </div>
                 @endforeach
             </div>

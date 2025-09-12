@@ -11,12 +11,17 @@
                         <p class="text-xl text-white mb-7 md:pr-16 xl:pr-28">
                             Don't let a broken console pause your fun.
                         </p>
+                        
                         <div class="flex flex-col gap-2 md:mb-2 md:w-10/12 md:flex-row">
-                            <a href="{{ route('services') }}" wire:navigate
-                               class="font-bold uppercase text-sm py-3.5 px-7 rounded-lg bg-white text-black shadow-md hover:shadow-lg flex justify-center items-center gap-3">
+                            <livewire:frontend.quote-form />
+
+                            <x-button 
+                                x-on:click="$dispatch('open-quote-modal')"
+                                class="font-bold uppercase text-sm py-3.5 px-7 rounded-lg bg-primary-700 text-white shadow-md hover:shadow-lg flex justify-center items-center gap-3">
                                 Get a Quote
-                            </a>
+                            </x-button>
                         </div>
+
                     </div>
                     <img alt="team work" loading="lazy"
                          class="col-span-1 my-20 h-auto max-h-[20rem] -translate-y-32 md:max-h-[25rem] lg:my-0 lg:ml-auto lg:max-h-[40rem] lg:translate-y-0"
@@ -24,55 +29,81 @@
                 </div>
             </div>
 
-            <div class="mx-8 lg:mx-16 -mt-24 rounded-xl bg-white p-5 md:p-14 shadow-md items-center">
-                <h3 class="text-3xl font-semibold text-gray-700 mb-3">Why Choose Us?</h3>
-                <div class="text-base text-gray-500 lg:w-5/12">
-                    <ul class="list-disc">
-                        <li>Fast Turnaround - Most repairs completed within 48 hours.</li>
-                        <li>Competitive Pricing with No Hidden Fees</li>
-                        <li>Mail-in Option Available</li>
-                        <li>Limited Warranty on All Repairs</li>
-                    </ul>
+            <div class="mx-8 lg:mx-16 -mt-24 rounded-xl bg-dark-400 p-5 md:p-14 shadow-md items-center">
+                <h3 class="text-3xl font-semibold text-primary-600 mb-3 text-center">Why Choose Us?</h3>
+                <div class="container mx-auto grid max-w-6xl grid-cols-1 gap-4 gap-y-12 md:grid-cols-2 lg:grid-cols-4 items-center">
+                    <div class="flex flex-col rounded-xl bg-transparent text-dark-700">
+                        <div class="flex justify-center items-center h-full p-6">
+                            <x-icon name="arrow-uturn-left" outline class="mr-4 size-8 flex-none text-primary-600" />
+                            <span class="text-md">Fast Turnaround - Most repairs completed within 48 hours.</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-center items-center h-full bg-transparent text-dark-700">
+                        <div class="flex justify-center items-center h-full p-6">
+                            <x-icon name="banknotes" outline class="mr-4 size-8 flex-none text-primary-600" />
+                            <span class="text-md">Competitive Pricing with No Hidden Fees</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col rounded-xl bg-transparent text-dark-700">
+                        <div class="flex justify-center items-center h-full p-6">
+                            <x-icon name="envelope" outline class="mr-4 size-8 flex-none text-primary-600" />
+                            <span class="text-md">Mail-in Option Available</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col rounded-xl bg-transparent text-dark-700">
+                        <div class="flex justify-center items-center h-full p-6">
+                            <x-icon name="shield-check" outline class="mr-4 size-8 flex-none text-primary-600" />
+                            <span class="text-md">Limited Warranty on All Repairs</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         {{-- SERVICES --}}
-        <section class="-mt-10 py-18 px-4">
-            <div class="container mx-auto mb-15 text-center">
-                <h1 class="text-5xl font-bold text-dark-400 mb-4">What We Fix</h1>
-                <p class="text-xl text-dark-500 mx-auto w-full px-4 lg:w-11/12 lg:px-8">
-                    We specialize in repairs for all major gaming consoles:
-                </p>
-            </div>
-
-            <div class="container mx-auto grid max-w-6xl grid-cols-1 gap-4 gap-y-12 md:grid-cols-2">
-                @forelse($categories as $category)
-                    <div class="flex flex-col rounded-xl bg-dark-600 text-dark-700 shadow-md">
-                        <div class="p-6">
-                            <h5 class="text-xl font-bold text-primary-700 mb-2">
-                                {{ $category->name }}
-                            </h5>
-                            <p class="text-dark-800">{{ $category->description }}</p>
+        <div class="relative isolate overflow-hidden bg-dark-800 px-6 py-18 sm:py-32 lg:overflow-visible lg:px-0">
+            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
+                <div class="lg:col-span-2 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+                    <div class="lg:pr-4">
+                        <div class="lg:max-w-lg">
+                        <h1 class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-primary-600 sm:text-5xl">What We Fix</h1>
+                        <p class="mt-6 text-md/8 text-dark-300">We fix all of your favorite consoles and get you back in the game in no time! We’ve got your back with our limited warranty on all game console repairs, no matter what your favorite game is.</p>
                         </div>
                     </div>
-                @empty
-                    <p>No service categories found.</p>
-                @endforelse
+                </div>
+                <div class="-mt-12 -ml-12 p-12 lg:sticky lg:top-4 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
+                    <img src="{{ asset('assets/images/playstation.png') }}" alt="" class="w-full max-w-full rounded-xl bg-transparent sm:w-228" />
+                </div>
+                <div class="lg:col-span-2 lg:col-start-2 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+                    <div class="lg:pr-4">
+                        <div class="max-w-xl text-base/7 text-gray-400 lg:max-w-lg">
+                            <p>We offer the following services for consoles.</p>
+                            <ul role="list" class="mt-8 text-gray-400">
+                                @forelse($categories as $category)
+                                    <li class="flex gap-x-3">
+                                        <x-icon name="check-badge" outline class="mt-1 size-5 flex-none text-primary-600" />
+                                        <span>{{ $category->name }}</span>
+                                    </li>
+                                @empty
+                                    <span>No services available.</span>
+                                @endforelse
+                            </ul>
+                            <div class="container mx-auto mt-12 text-center">
+                                <a href="{{ route('services') }}" wire:navigate
+                                class="font-semibold uppercase text-sm py-3.5 px-7 rounded-lg bg-primary-700 text-dark-400 shadow-md hover:shadow-lg">
+                                    View All Services
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="container mx-auto mt-12 text-center">
-                <a href="{{ route('services') }}" wire:navigate
-                   class="font-semibold uppercase text-sm py-3.5 px-7 rounded-lg bg-primary-700 text-dark-400 shadow-md hover:shadow-lg">
-                    View All Services
-                </a>
-            </div>
-        </section>
+        </div>
 
         {{-- PRICING --}}
         <div class="relative isolate bg-dark-300 px-6 py-24 sm:py-32 lg:px-8">
         <div class="mx-auto max-w-4xl text-center">
-            <h2 class="text-base/7 font-semibold text-primary-900">Pricing</h2>
+            <h2 class="text-2xl font-semibold text-primary-900">Pricing</h2>
             <p class="mt-2 text-5xl font-semibold tracking-tight text-balance text-primary-600 sm:text-6xl">Choose your service</p>
         </div>
         <p class="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-dark-700 sm:text-xl/8">Choose a service that will get you back in the gaming chair.</p>
@@ -115,7 +146,7 @@
                 </li>
             </ul>
             <p class="mt-6 text-base/7 text-xs text-dark-500">* Some parts may cost extra</p>
-            <a href="#" aria-describedby="tier-standard" class="mt-8 block rounded-md px-3.5 py-2.5 hover:bg-primary-100 text-center text-sm font-semibold text-primary-500 hover:text-primary-700 inset-ring inset-ring-primary-400 hover:inset-ring-primary-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 sm:mt-10">Start a quote</a>
+            <a x-on:click="$dispatch('open-quote-modal')" aria-describedby="tier-standard" class="mt-8 block rounded-md px-3.5 py-2.5 hover:bg-primary-300 text-center text-sm font-semibold text-primary-500 hover:text-primary-700 inset-ring inset-ring-primary-400 hover:inset-ring-primary-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 sm:mt-10">Start a quote</a>
             </div>
             <div class="relative rounded-3xl bg-dark-900 p-8 shadow-2xl ring-1 ring-gray-900/10 sm:p-10">
             <h3 id="tier-priority" class="text-xl md:text-2xl lg:text-3xl font-semibold text-primary-450">
@@ -171,7 +202,7 @@
                 </li>
             </ul>
             <p class="mt-6 text-base/7 text-xs text-dark-500">* Some parts may cost extra</p>
-            <a href="#" aria-describedby="tier-enterprise" class="mt-8 block rounded-md bg-primary-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:text-primary-200 hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 sm:mt-10">Get started today</a>
+            <a x-on:click="$dispatch('open-quote-modal')" aria-describedby="tier-enterprise" class="mt-8 block rounded-md bg-primary-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:text-primary-200 hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 sm:mt-10">Get started today</a>
             </div>
         </div>
         </div>

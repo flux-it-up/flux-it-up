@@ -8,7 +8,7 @@ trait ConsoleCode
 {
     public static function getConsoleCode(Console $console)
     {
-        $prefix = match($console->brand) {
+        $prefix = match($console->brand->name) {
             'PlayStation' => 'PS',
             'Xbox' => 'XB',
             'Nintendo' => 'N',

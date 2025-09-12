@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Console;
 
 use App\Livewire\Traits\Alert;
 use App\Models\Console;
+use App\Models\ConsoleBrand;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
@@ -17,6 +18,7 @@ class Update extends Component
 
     public ?Console $console;
     public $image, $newImage, $years;
+    public $brands;
     
     public bool $modal = false;
     
@@ -28,6 +30,7 @@ class Update extends Component
     public function mount()
     {
         $this->years = range(date('Y'),1970);
+        $this->brands = ConsoleBrand::all();
     }
 
     #[On('load::console')]
@@ -42,9 +45,9 @@ class Update extends Component
     public function rules(): array
     {
         return [
-            'console.brand' => [
+            'console.brand_id' => [
                 'required',
-                'string',
+                'integer',
                 'max:255'
             ],
             'console.model' => [

@@ -24,6 +24,8 @@
       x-on:name-updated.window="name = $event.detail.name"
       x-bind:class="{ 'dark bg-dark-800': darkTheme, 'bg-gray-100': !darkTheme }">
 
+    <x-dialog />
+    <x-toast />
     {{-- Header / Navigation --}}
     <header class="absolute inset-x-0 top-0 z-50 bg-dark-950">
         <nav class="flex items-center justify-between p-6 lg:px-8">
@@ -39,6 +41,7 @@
                 <a href="{{ route('welcome') }}" class="text-sm font-semibold text-white">Home</a>
                 <a href="{{ route('about') }}" class="text-sm font-semibold text-white">About</a>
                 <a href="{{ route('services') }}" class="text-sm font-semibold text-white">Services</a>
+                <a href="{{ route('products') }}" class="text-sm font-semibold text-white">Products</a>
             </div>
 
             {{-- User Links --}}
@@ -96,6 +99,7 @@
                                     <a href="{{ route('welcome') }}" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-white/5">Home</a>
                                     <a href="{{ route('about') }}" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-white/5">About</a>
                                     <a href="{{ route('services') }}" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-white/5">Services</a>
+                                    <a href="{{ route('products') }}" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-white/5">Products</a>
                                 </div>
                                 <div class="py-6">
                                     @can('view dashboard')
@@ -118,7 +122,7 @@
     </main>
 
     {{-- Footer --}}
-    <footer class="mt-10 bg-dark-950 px-8 pt-12">
+    <footer class="bg-dark-950 px-8 pt-12">
         <div class="container mx-auto">
             <div class="flex flex-wrap justify-center gap-8 md:justify-between">
                 <div class="text-center md:text-left">
@@ -128,6 +132,7 @@
                         <li><a href="{{ route('welcome') }}" wire:navigate class="text-base text-white font-medium py-1">Home</a></li>
                         <li><a href="{{ route('about') }}" wire:navigate class="text-base text-white font-medium py-1">About</a></li>
                         <li><a href="{{ route('services') }}" wire:navigate class="text-base text-white font-medium py-1">Services</a></li>
+                        <li><a href="{{ route('products') }}" wire:navigate class="text-base text-white font-medium py-1">Products</a></li>
                     </ul>
                 </div>
                 <div class="mt-8 w-full md:mt-0 md:w-auto">

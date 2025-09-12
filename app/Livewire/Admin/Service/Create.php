@@ -65,7 +65,7 @@ class Create extends Component
 
         $this->dispatch('created');
 
-        $this->resetExcept('consoles','selectedConsoles','priceAdjustments', 'serviceCategories');
+        $this->resetExcept('consoles', 'serviceCategories');
         $this->service = new Service();
 
         $this->toast()->success('Service created successfully!')->send();

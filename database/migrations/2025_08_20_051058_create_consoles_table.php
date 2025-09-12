@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('consoles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('brand', 100);
+            $table->foreignId('brand_id')->constrained()->nullOnDelete();
             $table->string('model', 100);
             $table->string('model_number');
             $table->string('code', 10);

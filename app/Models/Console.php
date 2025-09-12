@@ -6,15 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Permission\Traits\HasRoles;
 use App\Livewire\Traits\ConsoleCode;
 
 class Console extends Model
 {
-    use HasFactory, SoftDeletes, HasRoles, ConsoleCode;
+    use HasFactory, SoftDeletes, ConsoleCode;
 
     protected $fillable = [
-        'brand',
+        'brand_id',
         'model',
         'model_number',
         'release_year',
@@ -27,9 +26,14 @@ class Console extends Model
 
     ];
 
+    public function brand()
+    {
+        return $this->belongsTo(ConsoleBrand::class);
+    }
+
     public function services()
     {
-        return $this->belongsToMany(Service::class)
+        return $this->belongsToMany(Service::class, 'console_service', 'console_id', 'service_id')
             ->withPivot(['price_adjustment','sku'])
             ->withTimestamps();
     }
@@ -44,7 +48,7 @@ class Console extends Model
         parent::boot();
 
         static::saving(function ($console) {
-            $console->name = $console->brand .' '.$console->model;
+            $console->name = $console->brand->name .' '.$console->model;
             $console->code = ConsoleCode::getConsoleCode($console);
         });
     }

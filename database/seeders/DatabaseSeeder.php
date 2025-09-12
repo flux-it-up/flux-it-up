@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             AddressSeeder::class,
             StateSeeder::class,
+            ConsoleBrandSeeder::class,
             ConsoleSeeder::class,
             ProductCategorySeeder::class,
             SalesTaxNexusThresholdsSeeder::class,

@@ -4,7 +4,12 @@
             <livewire:admin.service.create @created="$refresh" />
         </div>
 
-        <x-table :$headers :$sort :rows="$this->rows" paginate simple-pagination filter loading :quantity="[5,25,50,100]">
+        <x-table :$headers :$sort :rows="$this->rows" striped paginate simple-pagination filter loading :quantity="[5,25,50,100]">
+            @interact('column_description', $row)
+                <div class="text-wrap w-60">
+                    {{ $row->description }}
+                </div>
+            @endinteract
             @interact('column_category', $row)
                 {{ $row->category->name }}
             @endinteract
@@ -12,9 +17,11 @@
                 ${{ $row->base_price }}
             @endinteract
             @interact('column_consoles', $row)
-                @foreach($row->consoles as $console)
-                    <x-badge class="my-0.5">{{ $console->name }}</x-badge><br>
-                @endforeach
+                <div class="text-wrap w-80">
+                    @foreach($row->consoles as $console)
+                        {{ $console->name }},&nbsp;
+                    @endforeach
+                </div>
             @endinteract
             @interact('column_action', $row)
                 <div class="flex gap-1">
