@@ -97,6 +97,6 @@
         </x-slot:menu>
         {{ $slot }}
     </x-layout>
-    @livewireScripts
+    @livewireScripts(['url' => '/livewire/update'])
     </body>
 </html>

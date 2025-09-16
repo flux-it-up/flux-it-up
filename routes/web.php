@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('pricingtiers')->group(function() {
             Route::get('/', PricingTierIndex::class)->name('pricing-tiers.index');
         });
-        Route::prefix('products')->group(function() {
+        Route::prefix('invproducts')->group(function() {
             Route::get('/', ProductIndex::class)->name('products.index');
             Route::get('/images/{product}', ProductImages::class)->name('product.images');
         });

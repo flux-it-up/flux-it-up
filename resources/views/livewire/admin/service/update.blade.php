@@ -1,23 +1,24 @@
 <div>
     <x-modal :title="__('Update Service: #:id', ['id' => $service?->id])" wire>
         <form id="service-update-{{ $service?->id }}" wire:submit="save" class="space-y-4">
-            <div>
+            <div class="grid grid-cols-2 gap-x-2">
                 <x-input label="{{ __('Name') }} *" x-ref="name" wire:model="service.name" required />
-            </div>
-            <div>
                 <x-input label="{{ __('Description') }} *" wire:model="service.description" required />
             </div>
-            <div>
+            <div class="grid grid-cols-1 gap-x-2">
                 <x-select.styled label="{{ __('Category') }} *" placeholder="Choose category..." wire:model="service.category_id" search :options="$serviceCategories" select="label:name|value:id" />
             </div>
-            <div>
-                <x-input label="{{ __('Service Code') }} *" placeholder="e.g. SCR, HDR, BTR..." wire:model="service.code" required />
-            </div>
-            <div>
+            <div class="grid grid-cols-2 gap-x-2">
                 <x-input label="{{ __('Base Price') }} *" prefix="$" wire:model="service.base_price" required/>
-            </div>
-            <div>
                 <x-input label="{{ __('Estimated Time') }} *" wire:model="service.estimated_time" required />
+            </div>
+            <div class="grid grid-cols-2 gap-x-2">
+                <x-textarea label="{{ __('Requirements') }}" wire:model="service.requirements" resize-auto />
+                <x-textarea label="{{ __('What`s Included') }}" wire:model="service.what_included" resize-auto />
+            </div>
+            <div class="grid grid-cols-2 gap-x-2">
+                <x-checkbox label="{{ __('Requires Diagnostics?') }}" wire:model="service.requires_diagnostics" />
+                <x-input label="{{ __('Diagnostic Fee') }}" prefix="$" wire:model="service.diagnostic_fee" />
             </div>
             <div>
                 <h3 class="text-sm text-secondary-600 dark:text-dark-300 whitespace-normal font-medium">Choose a Console(s)</h3>

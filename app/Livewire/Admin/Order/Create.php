@@ -16,7 +16,7 @@ class Create extends Component
     use Alert;
 
     public Order $order;
-    public $users, $allProducts, $subtotal, $total;
+    public $users, $allProducts;
     public $products = [];
 
     public bool $modal = false;
@@ -25,10 +25,11 @@ class Create extends Component
     {
         $this->order = new Order();
         $this->users = User::all();
-        $this->allProducts = Product::all();
+        $this->allProducts = Product::select('id','name')->get();
         $this->products = [['id'=>null,'quantity'=>1]];
         $this->order->order_status = 'pending';
         $this->order->payment_status = 'pending';
+        $this->order->is_gift = false;
 
     }
 
@@ -39,13 +40,15 @@ class Create extends Component
             'order.order_type' => ['required', 'string'],
             'order.order_status' => ['required','string'],
             'order.payment_status' => ['required','string'],
-            'order.subtotal' => ['required','decimal:2'],
-            'order.total_amount' => ['required','decimal:2'],
             'order.currency' => ['required','string'],
             'order.notes' => ['nullable','string'],
             'products' => ['required','array','min:1'],
             'products.*.id' => ['required','exists:products,id'],
             'products.*.quantity' => ['required','integer','min:1'],
+            'order.discount_code' => ['nullable','string','max:100'],
+            'order.admin_notes' => ['nullable','string'],
+            'order.is_gift' => ['required','boolean'],
+            'order.gift_message' => ['nullable','string'],
         ];
     }
 
@@ -54,31 +57,14 @@ class Create extends Component
         $this->products[] = ['id' => null, 'quantity' => 1];
     }
 
-    public function updatedProducts()
-    {
-        $this->calculateTotal();
-    }
-
     public function removeProductRow($index)
     {
-        unset($this->products[$index]);
-        $this->products = array_values($this->products);
-        $this->calculateTotal();
-    }
-
-    public function calculateTotal()
-    {
-        $this->order->subtotal = 0;
-        $this->order->total_amount = 0;
-
-        foreach ($this->products as $productData) {
-            if(!empty($productData['id'])) {
-                $product = $this->allProducts->find($productData['id']);
-                if($product) {
-                    $this->order->subtotal += $product->price * $productData['quantity'];
-                    $this->order->total_amount += $product->price * $productData['quantity'];
-                }
-            }
+        if (count($this->products) >= 1) {
+            unset($this->products[$index]);
+            $this->products = array_values($this->products);
+        }
+        if (count($this->products) == 0) {
+            $this->products[] = ['id' => null, 'quantity' => 1];
         }
     }
 
@@ -86,33 +72,28 @@ class Create extends Component
     {
         $this->validate();
 
+        $this->order->subtotal = 0.00;
+        $this->order->total_amount = 0.00;
+        
         $this->order->save();
 
-        $this->total = null;
+        $this->total = 0;
 
         foreach($this->products as $productData) {
             $product = Product::findOrFail($productData['id']);
-            $price = $product->price;
-            $lineTotal = $price * $productData['quantity'];
-            $total = 0;
 
             $this->order->items()->create([
                 'order_id' => $this->order->id,
                 'product_id' => $product->id,
                 'quantity' => $productData['quantity'],
-                'item_price' => $price,
-                'total_price' => $lineTotal,
             ]);
-
-            $total += $lineTotal;
         }
-
-        $this->order->update(['total_amount' => $total]);
 
         $this->dispatch('created');
 
-        $this->resetExcept('order','users', 'allProducts');
+        $this->reset('subtotal','total', 'products');
         $this->order = new Order();
+        $this->modal = false;
 
         $this->toast()->success('Order created successfully!');
     }

@@ -14,8 +14,13 @@ class OrderItem extends Model
         'order_id',
         'product_id',
         'quantity',
-        'item_price',
-        'total_price',
+        'unit_price',
+        'subtotal',
+        'tax_amount',
+        'discount_amount',
+        'total_amount',
+        'options',
+        'notes',
     ];
 
     protected function casts()

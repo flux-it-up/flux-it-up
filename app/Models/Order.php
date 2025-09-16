@@ -19,12 +19,18 @@ class Order extends Model
         'payment_status',
         'subtotal',
         'tax_amount',
+        'shipping_address_id',
+        'billing_address_id',
         'shipping_amount',
+        'discount_code',
         'discount_amount',
         'paid_amount',
         'total_amount',
         'currency',
         'notes',
+        'admin_notes',
+        'is_gift',
+        'gift_message',
     ];
 
     protected function casts(): array
@@ -36,6 +42,7 @@ class Order extends Model
             'discount_amount' => 'decimal:2',
             'paid_amount' => 'decimal:2',
             'total_amount' => 'decimal:2',
+            'is_gift' => 'boolean',
         ];
     }
 

@@ -46,10 +46,13 @@ class Create extends Component
         return [
             'service.name' => ['required', 'string', 'max:255'],
             'service.description' => ['required', 'string', 'max:255'],
-            'service.code' => ['required', 'string', 'max:10'],
             'service.category_id' => ['required', 'integer'],
             'service.base_price' => ['required', 'decimal:2'],
-            'service.estimated_time' => ['required', 'string', 'max:255']
+            'service.estimated_time' => ['required', 'string', 'max:255'],
+            'service.requirements' => ['nullable', 'string', 'max:255'],
+            'service.what_included' => ['nullable', 'string', 'max:255'],
+            'service.requires_diagnostics' => ['nullable', 'boolean'],
+            'service.diagnostic_fee' => ['required_if:service.requires_diagnostics,true', 'decimal:2'],
         ];
     }
 

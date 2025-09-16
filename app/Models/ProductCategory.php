@@ -15,6 +15,7 @@ class ProductCategory extends Model
     protected $fillable = [
         'name',
         'description',
+        'slug',
     ];
 
     protected static function booted()
@@ -22,6 +23,11 @@ class ProductCategory extends Model
         static::saving(function ($category) {
             $category->slug = Str::slug($category->name, '-');
         });
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 
     public function products() 

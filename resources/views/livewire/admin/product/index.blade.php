@@ -13,19 +13,41 @@
                 {{ $row->category->name }}
             @endinteract
             @interact('column_consoles', $row)
-                @foreach($row->consoles as $console)
-                    <x-badge class="my-0.5">{{ $console->name }}</x-badge><br>
-                @endforeach
-            @endinteract
-            @interact('column_price', $row)
-            ${{ $row->price }}
+                <div class="text-wrap w-30">
+                    @foreach($row->consoles as $console)
+                        {{ $console->name }},&nbsp;
+                    @endforeach
+                </div>
             @endinteract
             @interact('column_cost', $row)
             ${{ $row->cost }}
             @endinteract
+            @interact('column_price', $row)
+                @if($row->price == 0.00)
+                    FREE
+                @else
+                    ${{ $row->price }}
+                @endif
+            @endinteract
+            @interact('column_on_sale', $row)
+                @if($row->on_sale)
+                    Yes
+                @else
+                    No
+                @endif
+            @endinteract
+            @interact('column_sale_price', $row)
+                @if($row->sale_price)
+                    @if($row->sale_price == 0.00)
+                        FREE
+                    @else
+                        ${{ $row->sale_price }}
+                    @endif
+                @endif
+            @endinteract
             @interact('column_action', $row)
             <div class="flex gap-1">
-                <x-button.circle icon="pencil" wire:click="$dispatch('load::product', {'product':'{{ $row->id }}'})" />
+                <x-button.circle icon="pencil" wire:click="$dispatch('load::product', { 'id' : '{{ $row->id }}'})" />
                 <x-button.circle icon="photo" href="{{ route('product.images',['product' => $row]) }}" wire:navigate />
                 <livewire:admin.product.delete :product="$row" :key="uniqid('', true)" @deleted="$refresh" />
             </div>

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 use App\Livewire\Traits\GeneratesSku;
+use Illuminate\Support\Str;
 
 class Service extends Model
 {
@@ -15,17 +16,23 @@ class Service extends Model
     protected $fillable = [
         'name', 
         'description', 
-        'category', 
+        'category_id', 
         'code',
         'base_price', 
         'estimated_time',
         'sku',
+        'requirements',
+        'what_included',
+        'requires_diagnostics',
+        'diagnostic_fee',
     ];
 
     protected function casts(): array
     {
         return [
             'base_price' => 'decimal:2',
+            'requires_diagnostics' => 'boolean',
+            'diagnostic_fee' => 'decimal:2',
         ];
     }
 
@@ -38,6 +45,10 @@ class Service extends Model
         parent::boot();
 
         static::saving(function ($service) {
+            $service->code = Str::of($service->name)
+                ->explode(' ')
+                ->map(fn($word) => Str::substr($word, 0, 1))
+                ->implode('');
             $service->sku = $service->generatesServiceSku();
         });
     }

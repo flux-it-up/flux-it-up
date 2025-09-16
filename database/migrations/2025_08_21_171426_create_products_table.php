@@ -32,11 +32,11 @@ return new class extends Migration
             $table->boolean('is_featured')->default(false);
             $table->json('specifications')->nullable();
             $table->decimal('weight',8,2)->nullable();
-            $table->string('weight_unit')->default('lb');
+            $table->string('weight_unit')->nullable();
             $table->decimal('length', 8, 2)->nullable();
             $table->decimal('width', 8, 2)->nullable();
             $table->decimal('height', 8, 2)->nullable();
-            $table->string('dimension_unit')->default('in');
+            $table->string('dimension_unit')->nullable();
             $table->string('warranty')->nullable();
             $table->timestamps();
             $table->softDeletes();

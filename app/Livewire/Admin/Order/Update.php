@@ -67,32 +67,10 @@ class Update extends Component
         $this->products[] = ['id' => null, 'quantity' => 1];
     }
 
-    public function updatedProducts()
-    {
-        $this->calculateTotal();
-    }
-
     public function removeProductRow($index)
     {
         unset($this->products[$index]);
         $this->products = array_values($this->products);
-        $this->calculateTotal();
-    }
-
-    public function calculateTotal()
-    {
-        $this->order->subtotal = 0;
-        $this->order->total_amount = 0;
-
-        foreach ($this->products as $productData) {
-            if(!empty($productData['id'])) {
-                $product = $this->allProducts->find($productData['id']);
-                if($product) {
-                    $this->order->subtotal += $product->price * $productData['quantity'];
-                    $this->order->total_amount += $product->price * $productData['quantity'];
-                }
-            }
-        }
     }
 
     public function save()
@@ -107,15 +85,11 @@ class Update extends Component
 
         foreach($this->products as $productData) {
             $product = Product::findOrFail($productData['id']);
-            $price = $product->price;
-            $lineTotal = $price * $productData['quantity'];
 
             $this->order->items()->create([
                 'order_id' => $this->order->id,
                 'product_id' => $product->id,
                 'quantity' => $productData['quantity'],
-                'item_price' => $price,
-                'total_price' => $lineTotal,
             ]);
 
             $this->total += $lineTotal;

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 use App\Livewire\Traits\GeneratesSku;
 use Illuminate\Support\Str;
+use App\Livewire\Traits\ProductCode;
+use Illuminate\Support\Number;
 
 class Product extends Model
 {
@@ -18,21 +20,37 @@ class Product extends Model
         'code',
         'description', 
         'category_id', 
-        'price',
+        'price_override',
+        'sale_price_override',
         'cost', 
-        'quantity',
-        'min_quantity',
-        'weight',
-        'dimensions',
-        'warranty',
         'sku',
+        'is_featured',
+        'specifications',
+        'weight',
+        'weight_unit',
+        'length',
+        'width',
+        'height',
+        'dimension_unit',
+        'warranty',
+        'slug',
+        'on_sale',
+        'sale_percent',
+        'cost_markup',
     ];
 
     protected function casts(): array
     {
         return [
-            'price' => 'decimal:2',
+            'price_override' => 'decimal:2',
+            'sale_price_override' => 'decimal:2',
             'cost' => 'decimal:2',
+            'specifications' => 'array',
+            'on_sale' => 'boolean',
+            'sale_percent' => 'decimal:2',
+            'cost_markup' => 'decimal:2',
+            'price' => 'decimal:2',
+            'sale_price' => 'decimal:2',
         ];
     }
 
@@ -43,8 +61,63 @@ class Product extends Model
         parent::boot();
 
         static::saving(function ($product) {
+            $product->code = ProductCode::setProductCode($product);
             $product->sku = $product->generatesProductSku();
+            $product->slug = Str::slug($product->name, '-');
         });
+    }
+
+    public function getPriceAttribute()
+    {
+        if($this->price_override && $this->price_override >= 0.00) {
+            return Number::format($this->price_override,precision:2);
+        } elseif($this->cost_markup > 0.00) {
+            return Number::format($this->cost + ($this->cost * ($this->cost_markup / 100)),precision:2);
+        } else {
+            return $this->cost;
+        }
+    }
+
+    public function getSalePriceAttribute()
+    {
+        if($this->sale_price_override && $this->sale_price_override >= 0.00) {
+            return Number::format($this->sale_price_override,precision:2);
+        } elseif($this->sale_percent > 0.00 && $this->sale_percent <= 100) {
+            return Number::format($this->price - ($this->price * ($this->sale_percent / 100)),precision:2);
+        } else {
+            return null;
+        }
+    }
+
+    // In your Product model
+    public function setPriceOverrideAttribute($value)
+    {
+        $this->attributes['price_override'] = ($value === '' || $value === null) ? null : $value;
+    }
+
+    public function setSalePriceOverrideAttribute($value)
+    {
+        $this->attributes['sale_price_override'] = ($value === '' || $value === null) ? null : $value;
+    }
+
+    public function setSalePercentAttribute($value)
+    {
+        $this->attributes['sale_percent'] = ($value === '' || $value === null) ? null : $value;
+    }
+
+    public function setWeightAttribute($value)
+    {
+        $this->attributes['weight'] = ($value === '' || $value === null) ? null : $value;
+    }
+
+    public function setCostAttribute($value)
+    {
+        $this->attributes['cost'] = ($value === '' || $value === null) ? 0 : $value;
+    }
+
+    public function setCostMarkupAttribute($value)
+    {
+        $this->attributes['cost_markup'] = ($value === '' || $value === null) ? 0 : $value;
     }
 
     public function getPrimaryImageAttribute()
@@ -54,9 +127,14 @@ class Product extends Model
         return $primaryImage ? $primaryImage->image_url : 'products/placeholder.png';
     }
 
-    public function getSlugAttribute()
+    public function getQuantityAttribute()
     {
-        return Str::slug($this->name, '-');
+        return $this->inventory->quantity ?? 0;
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 
     public function category()
@@ -74,8 +152,18 @@ class Product extends Model
         return $this->hasMany(ProductImages::class);
     }
 
+    public function orderedImages()
+    {
+        return $this->images()->orderByDesc('is_primary')->orderBy('sort_order');
+    }
+
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function inventory()
+    {
+        return $this->hasOne(Inventory::class);
     }
 }

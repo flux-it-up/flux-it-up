@@ -13,7 +13,7 @@ class MainNavigation
     {
         $nav = Navigation::make()
             ->add('Home', route('welcome'))
-            ->add('Products', route('products.index'), function ($products) {
+            ->add('Products', route('products'), function ($products) {
                 foreach (ProductCategory::all() as $category) {
                     $products->add(
                         $category->name,

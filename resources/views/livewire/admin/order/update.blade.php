@@ -15,23 +15,30 @@
             </div>
             
             <div class="space-y-3">
-                <label class="dark:text-dark-400 mb-1 block text-sm font-semibold text-gray-600">
-                    Products
-                    <span class="font-bold text-red-500 not-italic">*</span>
-                </label>
+                <h3 class="text-sm text-secondary-600 dark:text-dark-300 whitespace-normal font-medium">Choose a Product(s)</h3>
+                <x-separator line />
                 @foreach ($products as $index => $product)
-                    <div class="flex space-x-2 items-center">
-                        <select wire:model="products.{{ $index }}.id" class="dark:text-dark-300 dark:bg-dark-800 dark:focus:ring-primary-600 dark:disabled:bg-dark-600 dark:ring-dark-600 flex w-full cursor-pointer items-center gap-x-2 rounded-md border-0 bg-white py-1.5 text-sm ring-1 ring-gray-300 disabled:bg-gray-100 disabled:text-gray-500 disabled:ring-gray-300 focus:ring-primary-600 text-gray-600 focus:outline-hidden focus:ring-2">
-                            <option value="">-- Select Product --</option>
-                            @foreach ($allProducts as $p)
-                                <option value="{{ $p->id }}">{{ $p->name }} (${{ $p->price }})</option>
-                            @endforeach
-                        </select>
-
-                        <input type="number" min="1" wire:model="products.{{ $index }}.quantity" class="dark:text-dark-300 dark:bg-dark-800 dark:focus:ring-primary-600 dark:disabled:bg-dark-600 dark:ring-dark-600 flex w-full cursor-pointer items-center gap-x-2 rounded-md border-0 bg-white py-1.5 text-sm ring-1 ring-gray-300 disabled:bg-gray-100 disabled:text-gray-500 disabled:ring-gray-300 focus:ring-primary-600 text-gray-600 focus:outline-hidden focus:ring-2">
-
-                        <button type="button" wire:click="removeProductRow({{ $index }})" class="bg-red-500 text-white px-2 py-1 rounded">x</button>
+                    <div class="grid grid-cols-5 gap-x-2 items-end" wire:key="product-{{ $index }}">
+                        <div class="col-span-3">
+                            <x-select.styled 
+                                label="{{ __('Product') }}"
+                                wire:model="products.{{ $index }}.id"
+                                placeholder="-- Select Product --"
+                                :options="$allProducts"
+                                select="label:name|value:id"
+                                option-label="name"
+                                option-value="id"
+                                search searchable
+                            />
+                        </div>
+                        <div class="col-span-1">
+                            <x-number min="1" wire:model="products.{{ $index }}.quantity" label="{{ __('Quantity') }}" />
+                        </div>
+                        <div class="col-span-1">
+                            <x-button icon="x-mark" wire:click="removeProductRow({{ $index }})" />
+                        </div>
                     </div>
+                    <x-separator line />
                 @endforeach
             </div>
 

@@ -51,24 +51,33 @@
                 <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                     @forelse($products as $product)
                     <div class="group relative shadow-none">
-                        <img src="{{ Storage::url('products/placeholder.png') }}" alt="Placeholder image" class="aspect-square w-full rounded-md shadow-none bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80" />
+                        <img src="{{ Storage::url($product->primary_image) }}" alt={{ $product->name }}." image" class="aspect-square w-full rounded-md shadow-none bg-transparent object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80" />
                         <div class="flex justify-between p-2">
                             <div>
                                 <h3 class="text-md font-semibold text-primary-600">
-                                    <a href="#">
+                                    <a href="{{ route('products.show', ['category' => $product->category->slug, 'product' => $product->slug]) }}">
                                         <span aria-hidden="true" class="absolute inset-0"></span>
                                         {{ $product->name }}
                                     </a>
                                 </h3>
                                 <p class="mt-1 text-sm text-dark-500">{{ $product->description }}</p>
                             </div>
-                            @if($product->sale_price)
-                            <div class="pl-4">
-                                <span class="text-dark-700 line-through">${{ number_format($product->price, 2) }}</span><br />
-                                <span class="text-[#228B22]">${{ number_format($product->sale_price, 2) }}</span>
-                            </div>
+                            @if($product->inventory->quantity > 0)
+                                @if($product->sale_price && $product->sale_price > 0.00)
+                                    <div class="pl-4">
+                                        <span class="text-dark-700 line-through">${{ number_format($product->price, 2) }}</span><br />
+                                        <span class="text-[#228B22]">${{ number_format($product->sale_price, 2) }}</span>
+                                    </div>
+                                @elseif($product->sale_price && $product->sale_price == 0.00)
+                                    <div class="pl-4">
+                                        <span class="text-dark-700 line-through">${{ number_format($product->price, 2) }}</span><br />
+                                        <span class="text-[#228B22]">FREE</span>
+                                    </div>
+                                @else
+                                    <p class="text-primary-600">${{ number_format($product->price, 2) }}</p>
+                                @endif
                             @else
-                                <p class="text-primary-600">${{ number_format($product->price, 2) }}</p>
+                                <span class="text-dark-950">Out Of Stock</span>
                             @endif
                         </div>
                     </div>
