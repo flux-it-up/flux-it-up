@@ -28,7 +28,6 @@ class Index extends Component
     public array $headers = [
         ['index' => 'id', 'label' => '#'],
         ['index' => 'name', 'label' => 'Name'],
-        ['index' => 'code', 'label' => 'Product Code'],
         ['index' => 'category', 'label' => 'Category'],
         ['index' => 'consoles', 'label' => 'Consoles'],
         ['index' => 'cost', 'label' => 'Cost'],

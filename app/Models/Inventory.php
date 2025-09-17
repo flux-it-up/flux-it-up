@@ -20,6 +20,13 @@ class Inventory extends Model
         'last_restock_date',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'last_restock_date' => 'datetime:Y-m-d H:i:s',
+        ];
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -65,6 +65,15 @@ class Product extends Model
             $product->sku = $product->generatesProductSku();
             $product->slug = Str::slug($product->name, '-');
         });
+
+        static::created(function($product) {
+            $product->inventory()->create([
+                'quantity' => 0,
+                'min_quantity' => 1,
+                'site_location' => 'main warehouse',
+                'last_restock_date' => now(),
+            ]); 
+        });
     }
 
     public function getPriceAttribute()
@@ -165,5 +174,10 @@ class Product extends Model
     public function inventory()
     {
         return $this->hasOne(Inventory::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(InventoryTransaction::class);
     }
 }

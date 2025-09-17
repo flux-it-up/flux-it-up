@@ -7,7 +7,7 @@
         <x-table :$headers :$sort :rows="$this->rows" paginate simple-pagination filter loading :quantity="[5,25,50,100]">
             @interact('column_name', $row)
                 <img src="{{ Storage::url($row->primary_image) }}" class="rounded size-20 my-2" />
-                {{ $row->name }}
+                <span class="text-primary-600 font-bold">{{ $row->name }}</span>
             @endinteract
             @interact('column_category', $row)
                 {{ $row->category->name }}

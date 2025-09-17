@@ -10,6 +10,7 @@ use App\Livewire\Admin\Service\Index as ServiceIndex;
 use App\Livewire\Admin\PricingTier\Index as PricingTierIndex;
 use App\Livewire\Admin\Product\Index as ProductIndex;
 use App\Livewire\Admin\Product\ManageImages as ProductImages;
+use App\Livewire\Admin\Inventory\Index as InventoryIndex;
 use App\Livewire\Admin\Order\Index as OrderIndex;
 use App\Livewire\Admin\RepairRequest\Index as RepairIndex;
 use App\Livewire\Frontend\Home;
@@ -40,6 +41,9 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('invproducts')->group(function() {
             Route::get('/', ProductIndex::class)->name('products.index');
             Route::get('/images/{product}', ProductImages::class)->name('product.images');
+        });
+        Route::prefix('inventory')->group(function() {
+            Route::get('/', InventoryIndex::class)->name('inventory.index');
         });
         Route::prefix('orders')->group(function() {
             Route::get('/', OrderIndex::class)->name('orders.index');

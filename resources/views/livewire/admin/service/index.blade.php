@@ -5,8 +5,9 @@
         </div>
 
         <x-table :$headers :$sort :rows="$this->rows" striped paginate simple-pagination filter loading :quantity="[5,25,50,100]">
-            @interact('column_description', $row)
-                <div class="text-wrap w-60">
+            @interact('column_name', $row)
+                <div class="font-bold text-primary-600">{{ $row->name }}</div>
+                <div class="text-wrap w-60 font-light !text-dark-500">
                     {{ $row->description }}
                 </div>
             @endinteract

@@ -86,6 +86,9 @@
                     @can('view products')
                         <x-side-bar.item text="{{ __('Products') }}" icon="list-bullet" :route="route('products.index')" />
                     @endcan
+                    @can('view products')
+                        <x-side-bar.item text="{{ __('Inventory') }}" icon="list-bullet" :route="route('inventory.index')" />
+                    @endcan
                     @can('view orders')
                         <x-side-bar.item text="{{ __('Orders') }}" icon="clipboard-document-list" :route="route('orders.index')" />
                     @endcan
