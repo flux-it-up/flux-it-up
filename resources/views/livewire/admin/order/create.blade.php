@@ -8,7 +8,7 @@
                     <x-select.styled label="{{ __('User') }} *" placeholder="Choose user..." wire:model="order.user_id" search searchable :options="$users" select="label:name|value:id" />
                 </div>
                 <div>
-                    <x-select.styled label="{{ __('Order Type') }} *" placeholder="Choose order type..." wire:model="order.order_type" :options="[['label' => 'Repair', 'value' => 'repair'],['label' => 'Product', 'value' => 'product'],['label' => 'Mixed', 'value' => 'mixed'],]" />
+                    <x-select.styled label="{{ __('Order Type') }} *" placeholder="Choose order type..." wire:model="order.order_type" :options="[['label' => 'Product', 'value' => 'product'],['label' => 'Mixed', 'value' => 'mixed'],]" />
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-x-2">

@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('repair_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained('orders');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained('users');
             $table->foreignId('console_id')->constrained('consoles');
-            $table->foreignId('service_id')->constrained('services');
             $table->string('console_serial_number', 100)->nullable();
             $table->text('issue_description');
             $table->text('customer_notes')->nullable();
@@ -33,6 +32,13 @@ return new class extends Migration
             
             $table->timestamps();
         });
+
+        Schema::create('repair_request_service', function (Blueprint $table) {
+            $table->foreignId('repair_request_id')->constrained('repair_requests');
+            $table->foreignId('service_id')->constrained('services');
+            
+            $table->timestamps();
+        });
     }
 
     /**
@@ -41,5 +47,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('repair_requests');
+        Schema::dropIfExists('repair_request_service');
     }
 };

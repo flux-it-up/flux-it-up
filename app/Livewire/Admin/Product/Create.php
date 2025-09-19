@@ -35,6 +35,7 @@ class Create extends Component
         $this->product->on_sale = false;
         $this->product->sale_percent = 0.00;
         $this->product->cost_markup = 0.00;
+        $this->product->warranty = 'No warranty';
     }
 
     public function rules(): array

@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\Product;
+use App\OrderService;
 
 class Create extends Component
 {
@@ -24,6 +25,7 @@ class Create extends Component
     public function mount(): void
     {
         $this->order = new Order();
+        $this->order->order_type = 'product';
         $this->users = User::all();
         $this->allProducts = Product::select('id','name')->get();
         $this->products = [['id'=>null,'quantity'=>1]];
@@ -72,26 +74,11 @@ class Create extends Component
     {
         $this->validate();
 
-        $this->order->subtotal = 0.00;
-        $this->order->total_amount = 0.00;
-        
-        $this->order->save();
-
-        $this->total = 0;
-
-        foreach($this->products as $productData) {
-            $product = Product::findOrFail($productData['id']);
-
-            $this->order->items()->create([
-                'order_id' => $this->order->id,
-                'product_id' => $product->id,
-                'quantity' => $productData['quantity'],
-            ]);
-        }
+        app(OrderService::class)->createOrder($this->order,$this->products);
 
         $this->dispatch('created');
 
-        $this->reset('subtotal','total', 'products');
+        $this->reset('products');
         $this->order = new Order();
         $this->modal = false;
 

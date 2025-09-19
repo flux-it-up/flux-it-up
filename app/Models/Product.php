@@ -166,9 +166,10 @@ class Product extends Model
         return $this->images()->orderByDesc('is_primary')->orderBy('sort_order');
     }
 
-    public function orderItems()
+    public function orders()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->belongsToMany(Order::class, 'order_product', 'product_id', 'order_id')
+            ->withPivot(['quantity']);
     }
 
     public function inventory()

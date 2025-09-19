@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('image_type',['before','during','after','diagnostic']);
             $table->text('description')->nullable();
             $table->foreignId('uploaded_by')->constrained('users','id');
-            $table->timestamp('uploaded_at')->useCurrent();
+            $table->timestamps();
         });
     }
 

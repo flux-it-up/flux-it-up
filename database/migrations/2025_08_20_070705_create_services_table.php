@@ -29,8 +29,8 @@ return new class extends Migration
         });
 
         Schema::create('console_service', function (Blueprint $table) {
-            $table->foreignId('service_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('console_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
+            $table->foreignId('console_id')->constrained('consoles')->cascadeOnDelete();
             $table->decimal('price_adjustment', 10, 2)->default(0);
             $table->string('sku')->unique()->nullable();
             $table->timestamps();

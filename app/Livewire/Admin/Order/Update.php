@@ -56,7 +56,6 @@ class Update extends Component
             'order.total_amount' => ['required','decimal:2'],
             'order.currency' => ['required','string'],
             'order.notes' => ['nullable','string'],
-            'products' => ['required','array','min:1'],
             'products.*.id' => ['required','exists:products,id'],
             'products.*.quantity' => ['required','integer','min:1'],
         ];

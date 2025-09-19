@@ -13,6 +13,9 @@ use App\Livewire\Admin\Product\ManageImages as ProductImages;
 use App\Livewire\Admin\Inventory\Index as InventoryIndex;
 use App\Livewire\Admin\Order\Index as OrderIndex;
 use App\Livewire\Admin\RepairRequest\Index as RepairIndex;
+use App\Livewire\Admin\TaxRates\State as StateIndex;
+use App\Livewire\Admin\TaxRates\County as CountyIndex;
+use App\Livewire\Admin\TaxRates\City as CityIndex;
 use App\Livewire\Frontend\Home;
 use App\Livewire\Frontend\About;
 use App\Livewire\Frontend\Services;
@@ -28,6 +31,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
         Route::prefix('users')->group(function() {
             Route::get('/', UsersIndex::class)->name('users.index');
+        });
+        Route::prefix('taxrates')->group(function() {
+            Route::get('/', StateIndex::class)->name('taxrates.state');
+            Route::prefix('{state:id}')->group(function() {
+                Route::get('/', CountyIndex::class)->name('taxrates.county');
+                Route::get('/{county:id}', CityIndex::class)->name('taxrates.city');
+            });
         });
         Route::prefix('consoles')->group(function() {
             Route::get('/', ConsoleIndex::class)->name('consoles.index');

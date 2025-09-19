@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->string('slug')->unique();
+        Schema::create('postal_codes', function (Blueprint $table) {
+            $table->id();
+            $table->string('state');
+            $table->string('county');
+            $table->string('city');
+            $table->string('postal_code',5);
+            $table->timestamps();
         });
     }
 
@@ -21,10 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn([
-                'slug',
-            ]);
-        });
+        Schema::dropIfExists('postal_codes');
     }
 };

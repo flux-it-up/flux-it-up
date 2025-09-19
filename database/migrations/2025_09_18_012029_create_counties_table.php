@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('console_brands', function (Blueprint $table) {
+        Schema::create('counties', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('state_id')->constrained('states')->nullOnDelete();
+            $table->string('code',50)->unique();
             $table->string('name');
-            $table->string('logo');
+            $table->decimal('tax_rate',5,3)->default(0);
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('console_brands');
+        Schema::dropIfExists('counties');
     }
 };

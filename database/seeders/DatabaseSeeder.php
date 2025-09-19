@@ -13,11 +13,13 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             AddressSeeder::class,
+            SalesTaxNexusThresholdsSeeder::class,
             StateSeeder::class,
+            CountySeeder::class,
+            CitySeeder::class,
             ConsoleBrandSeeder::class,
             ConsoleSeeder::class,
             ProductCategorySeeder::class,
-            SalesTaxNexusThresholdsSeeder::class,
             ServiceCategorySeeder::class,
         ]);
     }

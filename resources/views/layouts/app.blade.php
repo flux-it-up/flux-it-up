@@ -76,6 +76,9 @@
                     @can('view users')
                         <x-side-bar.item text="{{ __('Users') }}" icon="users" :route="route('users.index')" />
                     @endcan
+
+                        <x-side-bar.item text="{{ __('Tax Rates') }}" icon="scale" :route="route('taxrates.state')" />
+
                     @can('manage site')
                         <x-side-bar.item text="{{ __('Consoles') }}" icon="server" :route="route('consoles.index')" />
                         <x-side-bar.item text="{{ __('Services') }}" icon="clipboard" :route="route('services.index')" />
@@ -87,7 +90,7 @@
                         <x-side-bar.item text="{{ __('Products') }}" icon="list-bullet" :route="route('products.index')" />
                     @endcan
                     @can('view products')
-                        <x-side-bar.item text="{{ __('Inventory') }}" icon="list-bullet" :route="route('inventory.index')" />
+                        <x-side-bar.item text="{{ __('Inventory') }}" icon="table-cells" :route="route('inventory.index')" />
                     @endcan
                     @can('view orders')
                         <x-side-bar.item text="{{ __('Orders') }}" icon="clipboard-document-list" :route="route('orders.index')" />

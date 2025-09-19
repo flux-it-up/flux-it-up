@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class State extends Model
+class City extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
+        'state_id',
+        'county_id',
         'name',
         'code',
         'tax_rate',
@@ -30,13 +32,13 @@ class State extends Model
         );
     }
 
-    public function counties()
+    public function county()
     {
-        return $this->hasMany(County::class);
+        return $this->belongsTo(County::class);
     }
 
-    public function thresholds()
+    public function postal_codes()
     {
-        return $this->hasOne(SalesTaxNexusThresholds::class,'region','name');
+        return $this->hasMany(PostalCode::class);
     }
 }

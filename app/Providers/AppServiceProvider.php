@@ -17,6 +17,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SkuService::class, function($app) {
             return new SkuService();
         });
+
+        $this->app->singleton(OrderService::class, function($app) {
+            return new OrderService();
+        });
     }
 
     public function boot(): void

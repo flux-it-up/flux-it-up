@@ -126,8 +126,13 @@
         <div class="container mx-auto">
             <div class="flex flex-wrap justify-center gap-8 md:justify-between">
                 <div class="text-center md:text-left">
-                    <a href="/" wire:navigate class="block text-xl font-semibold text-white mb-4">Flux It Up</a>
+                    <a href="/" wire:navigate class="block text-xl font-semibold text-primary-500 mb-4">Flux It Up</a>
                     <p class="text-base text-white mb-12 font-normal">We flux wit it.</p>
+                    <address class="text-sm text-dark-600 mb-12 font-light">
+                        <div class="text-sm text-dark-600 mb-5 font-light">405 Dwain St.<br />Glenwood, AR 71943</div>
+                        <div><a class="text-sm text-dark-600 font-light" href="tel:870-681-0420">(870) 681-0420</a></div>
+                        <div><a class="text-sm text-dark-600 mb-12 font-light" href="mailto:wefluxwitit@fluxitup.net">wefluxwitit@fluxitup.net</a></div>
+                    </address>
                     <ul class="flex flex-wrap items-center justify-center md:justify-start gap-x-3">
                         <li><a href="{{ route('welcome') }}" wire:navigate class="text-base text-white font-medium py-1">Home</a></li>
                         <li><a href="{{ route('about') }}" wire:navigate class="text-base text-white font-medium py-1">About</a></li>

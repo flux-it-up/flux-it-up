@@ -60,9 +60,10 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function items()
+    public function products()
     {
-        return $this->hasMany(OrderItem::class, 'order_id');
+        return $this->hasMany(Product::class, 'order_product', 'order_id', 'product_id')
+            ->withPivot(['quantity']);
     }
 
     public function repairRequests()

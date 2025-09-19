@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inventories', function (Blueprint $table) {
+        Schema::create('inventory', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->integer('quantity')->default(0);
@@ -27,12 +27,17 @@ return new class extends Migration
         Schema::create('inventory_transactions', function (Blueprint $table) {
             $table->bigIncrements('transaction_id');
             $table->foreignId('product_id')->constrained();
-            $table->integer('quantity_change');
+            $table->morphs('referenceable');
             $table->enum('transaction_type', ['purchase','sale','return','adjustment','damage']);
-            $table->string('reference_id', 100)->nullable();
+            $table->integer('quantity_before');
+            $table->integer('quantity_after');
             $table->text('notes')->nullable();
             $table->foreignId('created_by')->constrained('users');
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
+
+            $table->index(['product_id','created_at']);
+            $table->index(['transaction_type','created_at']);
+            $table->index('created_at');
         });
 
 

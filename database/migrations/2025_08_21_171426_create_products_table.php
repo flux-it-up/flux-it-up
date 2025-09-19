@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('product_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('description');
             $table->timestamps();
             $table->softDeletes();
@@ -22,12 +23,16 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('code',100);
             $table->text('description');
             $table->foreignId('category_id')->constrained('product_categories')->nullOnDelete();
-            $table->decimal('price',10,2);
-            $table->decimal('sale_price', 10, 2)->nullable();
             $table->decimal('cost',10,2);
+            $table->decimal('cost_markup',5,2)->default(0.00);
+            $table->decimal('price_override',10,2)->nullable();
+            $table->boolean('on_sale')->default(0);
+            $table->decimal('sale_percent',5,2)->default(0.00);
+            $table->decimal('sale_price_override', 10, 2)->nullable();
             $table->string('sku')->unique()->nullable();
             $table->boolean('is_featured')->default(false);
             $table->json('specifications')->nullable();
@@ -42,9 +47,25 @@ return new class extends Migration
             $table->softDeletes();
         });
 
+        DB::statement('ALTER TABLE products
+            ADD CONSTRAINT chk_weight_unit_required 
+            CHECK (
+                (weight IS NULL AND weight_unit IS NULL) OR 
+                (weight IS NOT NULL AND weight_unit IS NOT NULL AND weight_unit != "")
+            )
+        ');
+        DB::statement('ALTER TABLE products
+            ADD CONSTRAINT chk_dimension_unit_required 
+            CHECK (
+                (length IS NULL AND width IS NULL AND height IS NULL AND dimension_unit IS NULL) OR 
+                ((length IS NOT NULL OR width IS NOT NULL OR height IS NOT NULL) AND 
+                    dimension_unit IS NOT NULL AND TRIM(dimension_unit) != "")
+            )
+        ');
+
         Schema::create('product_images', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id')->constrained('products')->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->string('image_url',255);
             $table->string('alt_text', 255)->nullable();
             $table->integer('sort_order')->default(0);

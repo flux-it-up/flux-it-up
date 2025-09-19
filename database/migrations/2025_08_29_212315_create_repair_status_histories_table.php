@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('old_status')->nullable();
             $table->string('new_status');
             $table->text('notes')->nullable();
-            $table->foreignId('changed_by')->constrained('users','id');
-            $table->timestamp('changed_at')->useCurrent();
+            $table->foreignId('changed_by')->constrained('users');
+            $table->timestamps();
         });
     }
 

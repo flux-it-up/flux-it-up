@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('order_number')->unique();
             $table->enum('order_type',['repair','product','mixed']);
             $table->foreignId('shipping_address_id')->nullable()->constrained('addresses')->nullOnDelete();
@@ -42,18 +42,10 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+        Schema::create('order_product', function (Blueprint $table) {
+            $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->integer('quantity')->default(1);
-            $table->decimal('unit_price', 10, 2);
-            $table->decimal('subtotal', 10, 2);
-            $table->decimal('tax_amount', 10, 2)->default(0);
-            $table->decimal('discount_amount', 10, 2)->default(0);
-            $table->decimal('total_amount', 10, 2);
-            $table->json('options')->nullable(); // For any additional options
-            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
@@ -63,7 +55,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_items');
+        Schema::dropIfExists('order_product');
         Schema::dropIfExists('orders');
     }
 };
