@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 use App\Traits\GeneratesSku;
 use Illuminate\Support\Str;
-use App\Traits\ProductCode;
+use App\Traits\GeneratesCode;
 use Illuminate\Support\Number;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes, HasRoles, GeneratesSku;
+    use HasFactory, SoftDeletes, HasRoles, GeneratesSku, GeneratesCode;
 
     protected $fillable = [
         'name', 
@@ -61,7 +61,7 @@ class Product extends Model
         parent::boot();
 
         static::saving(function ($product) {
-            $product->code = ProductCode::setProductCode($product);
+            $product->code = $product->generateProductCode();
             $product->sku = $product->generatesProductSku();
             $product->slug = Str::slug($product->name, '-');
         });

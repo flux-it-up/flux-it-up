@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\ConsoleCode;
+use App\Traits\GeneratesCode;
 
 class Console extends Model
 {
-    use HasFactory, SoftDeletes, ConsoleCode;
+    use HasFactory, SoftDeletes, GeneratesCode;
 
     protected $fillable = [
         'brand_id',
@@ -49,7 +49,7 @@ class Console extends Model
 
         static::saving(function ($console) {
             $console->name = $console->brand->name .' '.$console->model;
-            $console->code = ConsoleCode::getConsoleCode($console);
+            $console->code = $console->getConsoleCode();
         });
     }
 }

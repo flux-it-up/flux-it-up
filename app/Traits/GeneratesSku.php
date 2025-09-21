@@ -71,6 +71,6 @@ trait GeneratesSku
      */
     private function skuExists(string $sku, string $table): bool
     {
-        return \DB::table($table)->where('sku', $sku)->exists();
+        return DB::table($table)->where('sku', $sku)->exists();
     }
 }
