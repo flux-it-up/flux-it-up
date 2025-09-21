@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Livewire\Traits;
+namespace App\Traits;
+
 use Illuminate\Support\Str;
 use App\Models\Product;
 

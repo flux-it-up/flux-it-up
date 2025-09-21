@@ -6,7 +6,8 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Traits\Alert;
 use Illuminate\Contracts\View\View;
-use App\Models\Address;
+use App\Models\{Address,User};
+use App\Services\AddressService;
 
 class DeleteAddress extends Component
 {
@@ -35,15 +36,14 @@ class DeleteAddress extends Component
 
     public function delete()
     {
-        if ($this->address->is_default) {
-            $this->error('You cannot delete a default shipping/billing address.','Delete Default');
-            return;
-        }
+        $this->user = User::findOrFail($this->address->user_id);
 
-        $this->address->delete();
+        app(AddressService::class)->deleteAddress($this->user, $this->address);
 
-        $this->dispatch('deleted');
+        $this->dispatch('address-deleted');
         
-        $this->success();
+        $this->toast()
+                ->success('Address deleted successfully!')
+                ->send();
     }
 }

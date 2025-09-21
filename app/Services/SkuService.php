@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Service;
+namespace App\Services;
 
 use App\Models\Service;
 use App\Models\Console;

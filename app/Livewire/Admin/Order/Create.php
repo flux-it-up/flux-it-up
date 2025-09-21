@@ -74,7 +74,7 @@ class Create extends Component
     {
         $this->validate();
 
-        app(OrderService::class)->createOrder($this->order,$this->products);
+        $orderService = new OrderService($this->order->user_id);
 
         $this->dispatch('created');
 

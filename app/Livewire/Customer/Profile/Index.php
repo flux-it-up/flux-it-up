@@ -109,6 +109,7 @@ class Index extends Component
     public function rows(): LengthAwarePaginator
     {
         return Address::query()
+            ->with('city','state','county')
             ->where('user_id', [Auth::id()])
             ->when($this->search !== null, fn (Builder $query) => $query->whereAny(['line1', 'line2','city','state','postal_code','country'], 'like', '%'.trim($this->search).'%'))
             ->orderBy(...array_values($this->sort))

@@ -2,156 +2,266 @@
 
 namespace App\Livewire\Customer\Profile;
 
-use App\Livewire\Traits\Alert;
-use App\Models\Address;
-use Illuminate\Contracts\View\View;
-use Illuminate\Validation\Rule;
-use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\Attributes\Validate;
+use Livewire\Attributes\On;
+use Illuminate\Support\Facades\Auth;
+use App\Livewire\Traits\Alert;
+use Illuminate\Contracts\View\View;
+use App\Models\{Address, State, County, City, PostalCode, User};
+use App\Services\AddressService;
+use Illuminate\Validation\ValidationException;
 
 class UpdateAddress extends Component
 {
     use Alert;
 
-    public ?Address $address;
-
-    public $states;
-
-    public bool $modal = false;
+    // ==================== Properties ====================
     
-    public function mount()
-    {
-        $this->states = [
-            ['label' => 'Alabama', 'value' => 'AL'],
-            ['label' => 'Alaska', 'value' => 'AK'],
-            ['label' => 'Arizona', 'value' => 'AZ'],
-            ['label' => 'Arkansas', 'value' => 'AR'],
-            ['label' => 'California', 'value' => 'CA'],
-            ['label' => 'Canal Zone', 'value' => 'CZ'],
-            ['label' => 'Colorado', 'value' => 'CO'],
-            ['label' => 'Connecticut', 'value' => 'CT'],
-            ['label' => 'Delaware', 'value' => 'DE'],
-            ['label' => 'District of Columbia', 'value' => 'DC'],
-            ['label' => 'Florida', 'value' => 'FL'],
-            ['label' => 'Georgia', 'value' => 'GA'],
-            ['label' => 'Guam', 'value' => 'GU'],
-            ['label' => 'Hawaii', 'value' => 'HI'],
-            ['label' => 'Idaho', 'value' => 'ID'],
-            ['label' => 'Illinois', 'value' => 'IL'],
-            ['label' => 'Indiana', 'value' => 'IN'],
-            ['label' => 'Iowa', 'value' => 'IA'],
-            ['label' => 'Kansas', 'value' => 'KS'],
-            ['label' => 'Kentucky', 'value' => 'KY'],
-            ['label' => 'Louisiana', 'value' => 'LA'],
-            ['label' => 'Maine', 'value' => 'ME'],
-            ['label' => 'Maryland', 'value' => 'MD'],
-            ['label' => 'Massachusetts', 'value' => 'MA'],
-            ['label' => 'Michigan', 'value' => 'MI'],
-            ['label' => 'Minnesota', 'value' => 'MN'],
-            ['label' => 'Mississippi', 'value' => 'MS'],
-            ['label' => 'Missouri', 'value' => 'MO'],
-            ['label' => 'Montana', 'value' => 'MT'],
-            ['label' => 'Nebraska', 'value' => 'NE'],
-            ['label' => 'Nevada', 'value' => 'NV'],
-            ['label' => 'New Hampshire', 'value' => 'NH'],
-            ['label' => 'New Jersey', 'value' => 'NJ'],
-            ['label' => 'New Mexico', 'value' => 'NM'],
-            ['label' => 'New York', 'value' => 'NY'],
-            ['label' => 'North Carolina', 'value' => 'NC'],
-            ['label' => 'North Dakota', 'value' => 'ND'],
-            ['label' => 'Ohio', 'value' => 'OH'],
-            ['label' => 'Oklahoma', 'value' => 'OK'],
-            ['label' => 'Oregon', 'value' => 'OR'],
-            ['label' => 'Pennsylvania', 'value' => 'PA'],
-            ['label' => 'Puerto Rico', 'value' => 'PR'],
-            ['label' => 'Rhode Island', 'value' => 'RI'],
-            ['label' => 'South Carolina', 'value' => 'SC'],
-            ['label' => 'South Dakota', 'value' => 'SD'],
-            ['label' => 'Tennessee', 'value' => 'TN'],
-            ['label' => 'Texas', 'value' => ''],
-            ['label' => 'Utah', 'value' => ''],
-            ['label' => 'Vermont', 'value' => ''],
-            ['label' => 'Virgin Islands', 'value' => ''],
-            ['label' => 'Virginia', 'value' => ''],
-            ['label' => 'Washington', 'value' => ''],
-            ['label' => 'West Virginia', 'value' => ''],
-            ['label' => 'Wisconsin', 'value' => ''],
-            ['label' => 'Wyoming', 'value' => ''],
-        ];
-    }
+    public User $user;
+    public bool $modal = false;
+    public ?Address $address = null; // Add this property to store the current address
 
-    public function render(): View
+    // Form fields - these match your blade template
+    #[Validate('required|string|in:shipping,billing,both')]
+    public string $type = 'shipping';
+
+    #[Validate('nullable|string|max:255')]
+    public ?string $label = null;
+
+    #[Validate('required|string|max:255')]
+    public string $line1 = '';
+
+    #[Validate('nullable|string|max:255')]
+    public ?string $line2 = null;
+
+    #[Validate('required|exists:cities,id')]
+    public ?int $city_id = null;
+
+    #[Validate('required|exists:counties,id')]
+    public ?int $county_id = null;
+
+    #[Validate('required|exists:states,id')]
+    public ?int $state_id = null;
+
+    #[Validate('required|string|max:10')]
+    public string $postal_code = '';
+
+    #[Validate('required|string|max:255')]
+    public string $country = 'United States of America';
+
+    #[Validate('boolean')]
+    public bool $is_default = false;
+
+    #[Validate('boolean')]
+    public bool $billing_same_as_shipping = false;
+
+    // Collections for dropdowns
+    public $states;
+    public $counties;
+    public $cities;
+
+    // ==================== Lifecycle Methods ====================
+
+    public function mount(): void
     {
-        return view('livewire.customer.profile.update-address');
+        $this->user = Auth::user();
+        $this->modal = false;
+        $this->initializeCollections();
     }
 
     #[On('load::address')]
-    public function load(Address $address): void
+    public function load(int $addressId): void
     {
+        // Find the address by ID
+        $address = Address::findOrFail($addressId);
         $this->address = $address;
-
+        
+        // Load address data into form fields
+        $this->type = $address->type;
+        $this->label = $address->label;
+        $this->line1 = $address->line1;
+        $this->line2 = $address->line2;
+        $this->city_id = $address->city_id;
+        $this->county_id = $address->county_id;
+        $this->state_id = $address->state_id;
+        $this->postal_code = $address->postal_code;
+        $this->country = $address->country;
+        $this->is_default = $address->is_default;
+        
+        // Load related collections
+        $this->updateCollectionsFromAddress($address);
+        
+        // Open the modal
         $this->modal = true;
     }
 
-    public function rules(): array
+    // ==================== Event Listeners ====================
+
+    public function updatedPostalCode(): void
     {
-        return [
-            'address.type' => [
-                'required',
-                'string'
-            ],
-            'address.label' => [
-                'nullable', 
-                'string', 
-                'max:255'
-            ],
-            'address.line1' => [
-                'required', 
-                'string', 
-                'max:255'
-            ],
-            'address.line2' => [
-                'nullable', 
-                'string', 
-                'max:255'
-            ],
-            'address.city' => [
-                'required', 
-                'string', 
-                'max:255'
-            ],
-            'address.state' => [
-                'required', 
-                'string', 
-                'max:255'
-            ],
-            'address.postal_code' => [
-                'required', 
-                'string', 
-                'max:255'
-            ],
-            'address.country' => [
-                'required', 
-                'string', 
-                'max:255'
-            ],
-            'address.is_default' => [
-                'nullable', 
-                'boolean'
-            ],
-        ];
+        if (empty($this->postal_code)) {
+            return;
+        }
+
+        $postalCode = PostalCode::where('postal_code', $this->postal_code)->first();
+        
+        if ($postalCode) {
+            $this->state_id = $postalCode->state_id;
+            $this->county_id = $postalCode->county_id;
+            $this->city_id = $postalCode->city_id;
+            
+            // Update the collections based on postal code
+            $this->updateCollectionsFromPostalCode($postalCode);
+            
+            // Dispatch event for JavaScript
+            $this->dispatch('postal-code-updated');
+        }
+    }
+
+    public function updatedStateId(): void
+    {
+        if ($this->state_id) {
+            $this->counties = County::where('state_id', $this->state_id)
+                ->select('name', 'id')
+                ->orderBy('name')
+                ->get();
+            
+            // Reset dependent fields
+            $this->county_id = null;
+            $this->city_id = null;
+            $this->cities = collect();
+        }
+    }
+
+    public function updatedCountyId(): void
+    {
+        if ($this->county_id) {
+            $this->cities = City::where('county_id', $this->county_id)
+                ->select('name', 'id')
+                ->orderBy('name')
+                ->get();
+            
+            // Reset dependent field
+            $this->city_id = null;
+        }
+    }
+
+    // ==================== Actions ====================
+
+    public function closeModal(): void
+    {
+        $this->modal = false;
+        $this->resetValidation();
     }
 
     public function save(): void
     {
-        $this->validate();
+        try {
+            $this->validate();
 
-        $this->address->save();
+            if (!$this->address) {
+                throw new \Exception('No address selected for update');
+            }
 
-        $this->dispatch('updated');
+            $addressData = $this->getAddressData();
+            
+            // Update the address
+            app(AddressService::class)->updateAddress(
+                $this->user,
+                $this->address,
+                $addressData,
+                $this->is_default
+            );
 
-        $this->resetExcept('user','states');
+            $this->dispatch('address-updated');
+            $this->closeModal();
+            
+            $this->toast()
+                ->success('Address updated successfully!')
+                ->send();
 
-        $this->success();
+        } catch (ValidationException $e) {
+            $this->toast()
+                ->error('Please check the form for errors.')
+                ->send();
+            throw $e;
+        } catch (\Exception $e) {
+            $this->toast()
+                ->error('An error occurred while updating the address: ' . $e->getMessage())
+                ->send();
+        }
+    }
+
+    // ==================== Helper Methods ====================
+
+    private function initializeCollections(): void
+    {
+        $this->states = State::select('name', 'id')
+            ->orderBy('name')
+            ->get();
+        
+        $this->counties = collect();
+        $this->cities = collect();
+    }
+
+    private function updateCollectionsFromPostalCode(PostalCode $postalCode): void
+    {
+        // Update counties for the selected state
+        $this->counties = County::where('state_id', $postalCode->state_id)
+            ->select('name', 'id')
+            ->orderBy('name')
+            ->get();
+
+        // Update cities for the selected county
+        $this->cities = City::where('county_id', $postalCode->county_id)
+            ->select('name', 'id')
+            ->orderBy('name')
+            ->get();
+    }
+
+    private function updateCollectionsFromAddress(Address $address): void
+    {
+        // Load counties for the selected state
+        $this->counties = County::where('state_id', $address->state_id)
+            ->select('name', 'id')
+            ->orderBy('name')
+            ->get();
+
+        // Load cities for the selected county
+        $this->cities = City::where('county_id', $address->county_id)
+            ->select('name', 'id')
+            ->orderBy('name')
+            ->get();
+    }
+
+    private function getAddressData(): array
+    {
+        return [
+            'type' => $this->type,
+            'label' => $this->label,
+            'line1' => $this->line1,
+            'line2' => $this->line2,
+            'city_id' => $this->city_id,
+            'county_id' => $this->county_id,
+            'state_id' => $this->state_id,
+            'postal_code' => $this->postal_code,
+            'country' => $this->country,
+            'is_default' => $this->is_default,
+        ];
+    }
+
+    // ==================== Computed Properties ====================
+
+    public function getCanSetDefaultProperty(): bool
+    {
+        return $this->type !== 'both';
+    }
+
+    // ==================== Render ====================
+
+    public function render(): View
+    {
+        return view('livewire.customer.profile.update-address');
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Livewire\Admin\Services\SkuService;
 use Illuminate\Support\Facades\Schema;
 use Livewire\Livewire;
 use Illuminate\Support\Facades\Blade;
@@ -14,13 +13,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(SkuService::class, function($app) {
-            return new SkuService();
-        });
-
-        $this->app->singleton(OrderService::class, function($app) {
-            return new OrderService();
-        });
+        
     }
 
     public function boot(): void

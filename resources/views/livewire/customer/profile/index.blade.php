@@ -5,10 +5,10 @@
         </x-alert> --}}
 
         <div class="mb-2">
-            <livewire:user.update-profile @created="$refresh" />
+            <livewire:customer.profile.update-profile @created="$refresh" />
         </div>
         <div class="mb-2">
-            <livewire:user.create-address @created="$refresh" />
+            <livewire:customer.profile.create-address @addressCreated="$refresh" />
         </div>
     
         <x-table :$headers :$sort :rows="$this->rows" paginate simple-pagination filter loading :quantity="[5,25,50,100]">
@@ -21,7 +21,7 @@
                     @if($row->line2)
                         {{ $row->line2 }}<br>
                     @endif
-                    {{ $row->city }}, {{ $row->state }} {{ $row->postal_code }}<br>
+                    {{ $row->city->name }}, {{ $row->state->name }} {{ $row->postal_code }}<br>
                     {{ $row->country }}
                 </span>
             @endinteract
@@ -32,14 +32,14 @@
             @endinteract
             @interact('column_action', $row)
             <div class="flex gap-1">
-                <x-button.circle icon="pencil" wire:click="$dispatch('load::address', { 'address' : '{{ $row->id }}'})" />
-                <livewire:user.delete-address :address="$row" :key="uniqid('', true)" @deleted="$refresh" />
+                <x-button.circle icon="pencil" wire:click="$dispatch('load::address', {addressId: {{ $row->id }} })" />
+                <livewire:customer.profile.delete-address :address="$row" :key="uniqid('', true)" @addressDeleted="$refresh" />
             </div>
             @endinteract
         </x-table>
     </x-card>
 
-    <livewire:user.update-address @updated="$refresh" />
+    <livewire:customer.profile.update-address @addressUpdated="$refresh" />
 </div>
 
             

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -54,7 +55,7 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        static::saving(function ($user) {
+        static::creating(function ($user) {
             $user->assignRole('customer');
         });
     }
@@ -86,14 +87,38 @@ class User extends Authenticatable
         return $this->addresses()->where('type', 'billing');
     }
 
-    public function defaultShipping()
+    public function defaultShippingAddress()
     {
-        return $this->addresses()->where('type', 'shipping')->where('is_default', true)->first();
+        return $this->hasOne(Address::class)
+                ->where('type', 'shipping')
+                ->where('is_default', true);
     }
 
-    public function defaultBilling()
+    public function defaultBillingAddress()
     {
-        return $this->addresses()->where('type', 'billing')->where('is_default', true)->first();
+        return $this->hasOne(Address::class)
+                ->where('type', 'billing')
+                ->where('is_default', true);
+    }
+
+    public function scopeWithDefaultShipping(Builder $query)
+    {
+        return $query->whereHas('defaultShippingAddress');
+    }
+
+    public function scopeWithDefaultBilling(Builder $query)
+    {
+        return $query->whereHas('defaultBillingAddress');
+    }
+
+    public function hasDefaultShippingAddress(): bool
+    {
+        return $this->defaultShippingAddress()->exists();
+    }
+
+    public function hasDefaultBillingAddress(): bool
+    {
+        return $this->defaultBillingAddress()->exists();
     }
 
     public function orders()

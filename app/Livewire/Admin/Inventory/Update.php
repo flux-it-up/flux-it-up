@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
 use App\Models\Inventory;
-use App\InventoryService;
+use App\Services\InventoryService;
 
 class Update extends Component
 {

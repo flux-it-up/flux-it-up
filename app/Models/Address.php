@@ -13,7 +13,7 @@ class Address extends Model
 
     protected $fillable = [
         'user_id', 'type', 'label', 'line1', 'line2',
-        'city', 'state', 'postal_code', 'country', 'is_default'
+        'city_id', 'county_id', 'state_id', 'postal_code', 'country', 'is_default'
     ];
 
     protected function casts(): array
@@ -35,5 +35,20 @@ class Address extends Model
     public function getIsDefaultAttribute($value)
     {
         return (bool) $value;
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function county()
+    {
+        return $this->belongsTo(County::class);
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
     }
 }
