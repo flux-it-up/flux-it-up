@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             ConsoleBrandSeeder::class,
             ConsoleSeeder::class,
+            ConsoleModelSeeder::class,
             ProductCategorySeeder::class,
             ServiceCategorySeeder::class,
         ]);

@@ -43,6 +43,11 @@ class Console extends Model
         return $this->belongsToMany(Product::class);
     }
 
+    public function models()
+    {
+        return $this->hasMany(ConsoleModel::class);
+    }
+
     protected static function boot()
     {
         parent::boot();
