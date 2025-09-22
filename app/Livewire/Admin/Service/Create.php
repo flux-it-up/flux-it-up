@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use TallStackUi\Traits\Interactions;
+use App\Services\SkuService;
 
 class Create extends Component
 {

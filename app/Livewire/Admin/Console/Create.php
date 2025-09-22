@@ -48,16 +48,6 @@ class Create extends Component
                 'string',
                 'max:255'
             ],
-            'console.model_number' => [
-                'required',
-                'string',
-                'max:255'
-            ],
-            'console.release_year' => [
-                'required',
-                'integer',
-                'digits:4'
-            ],
             'newImage' => [
                 'nullable',
                 'image',
@@ -128,6 +118,7 @@ class Create extends Component
 
         $this->console->specifications = $transformedSpecs;
 
+        // Handle image upload if a new image is provided
         if($this->newImage) {
             if($this->image)
             {
@@ -142,7 +133,7 @@ class Create extends Component
 
         $this->dispatch('created');
 
-        $this->resetExcept('years');
+        $this->resetExcept('brands');
         $this->console = new Console();
 
         $this->toast()->success('Console created successfully!')->send();

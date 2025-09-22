@@ -26,12 +26,13 @@
             @endinteract
             @interact('column_action', $row)
                 <div class="flex gap-1">
+                    <x-button.circle icon="eye" wire:click="$dispatch('view::service', { id: {{ $row->id }} })" />
                     <x-button.circle icon="pencil" wire:click="$dispatch('load::service', { 'service' : '{{ $row->id }}'})" />
                     <livewire:admin.service.delete :service="$row" :key="uniqid('', true)" @deleted="$refresh" />
                 </div>
             @endinteract
         </x-table>
     </x-card>
-
+    <livewire:admin.service.view />
     <livewire:admin.service.update @updated="$refresh" />
 </div>

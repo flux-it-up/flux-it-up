@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use App\Services\SkuService;
 
 class Update extends Component
 {

@@ -1,10 +1,10 @@
 <div>
     <x-button :text="__('Add New Console')" wire:click="$toggle('modal')" sm />
 
-    <x-modal :title="__('Add New Console')" wire x-on:open="setTimeout(() => $refs.name.focus(), 250)">
+    <x-modal :title="__('Add New Console')" wire x-on:open="setTimeout(() => $refs.brand.focus(), 450)">
         <form id="console-create" wire:submit="save" class="space-y-4">
             <div>
-                <x-select.styled label="{{__('Brand') }} *" wire:model="console.brand" :options="$brands"  select="label:name|value:id" placeholder="Choose Brand..." required autofocus autocomplete="brand" />
+                <x-select.styled label="{{__('Brand') }} *" x-ref="brand" wire:model="console.brand_id" :options="$brands"  select="label:name|value:id" placeholder="Choose Brand..." required autofocus autocomplete="brand" />
             </div>
             <div>
                 <x-input label="{{ __('Model') }} *" wire:model="console.model" />
