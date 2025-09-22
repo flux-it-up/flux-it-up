@@ -15,15 +15,13 @@ class Console extends Model
     protected $fillable = [
         'brand_id',
         'model',
-        'model_number',
-        'release_year',
         'image',
         'specifications',
         'code'
     ];
 
     protected $casts = [
-
+        'specifications' => 'array',
     ];
 
     public function brand()
@@ -54,7 +52,7 @@ class Console extends Model
 
         static::saving(function ($console) {
             $console->name = $console->brand->name .' '.$console->model;
-            $console->code = $console->getConsoleCode();
+            $console->code = $console->generateConsoleCode();
         });
     }
 }

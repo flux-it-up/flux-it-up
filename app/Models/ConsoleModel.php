@@ -17,7 +17,7 @@ class ConsoleModel extends Model
     ];
 
     protected $casts = [
-        'release_year' => 'date:Y',
+        'release_year' => 'integer',
     ];
 
     public function consoles()

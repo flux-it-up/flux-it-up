@@ -31,8 +31,6 @@ class Index extends Component
         ['index' => 'image', 'label' => 'Image'],
         ['index' => 'brand', 'label' => 'Brand'],
         ['index' => 'model', 'label' => 'Model'],
-        ['index' => 'model_number', 'label' => 'Model Number'],
-        ['index' => 'release_year', 'label' => 'Release Year'],
         ['index' => 'code', 'label' => 'Code'],
         ['index' => 'action', 'sortable' => false],
     ];
@@ -41,7 +39,8 @@ class Index extends Component
     public function rows(): LengthAwarePaginator
     {
         return Console::query()
-            ->when($this->search !== null, fn (Builder $query) => $query->whereAny(['brand', 'model', 'model_number', 'release_year'], 'like', '%'.trim($this->search).'%'))
+            ->with('models')
+            ->when($this->search !== null, fn (Builder $query) => $query->whereAny(['brand', 'model', 'model_numbers', 'release_years'], 'like', '%'.trim($this->search).'%'))
             ->orderBy(...array_values($this->sort))
             ->paginate($this->quantity)
             ->withQueryString();

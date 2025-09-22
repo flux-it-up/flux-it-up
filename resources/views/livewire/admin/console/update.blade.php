@@ -8,12 +8,6 @@
                 <x-input label="{{ __('Model') }} *" wire:model="console.model" />
             </div>
             <div>
-                <x-input label="{{ __('Model Number') }}" wire:model="console.model_number" />
-            </div>
-            <div>
-                <x-select.styled label="{{ __('Release Year') }}" wire:model="console.release_year" placeholder="Select release year..." :options="$years" />
-            </div>
-            <div>
                 {{-- Image Upload --}}
                 <div class="my-4">
                     <x-upload wire:model="newImage" label="Upload New Image" />
@@ -22,6 +16,22 @@
                         <img src="{{ Storage::url($image) }}" class="mt-4 w-24 h-24 mb-2" />
                     @endif
                 </div>
+            </div>
+            <div class="space-y-3">
+                <h3 class="text-sm text-secondary-600 dark:text-dark-300 whitespace-normal font-medium">Specifications</h3>
+                @foreach ($specifications as $skey=>$spec)
+                    <div class="grid grid-cols-5 gap-x-2" wire:key="spec-{{ $skey }}">
+                        <div class="col-span-2">
+                            <x-input wire:model="specifications.{{ $skey }}.name" label="Name" />
+                        </div>
+                        <div class="col-span-2">
+                            <x-input wire:model="specifications.{{ $skey }}.svalue" label="Value" />
+                        </div>
+                        <div class="col-span-1">
+                            <x-button icon="x-mark" wire:click="removeSpecificationsRow({{ $skey }})" class="mt-6" />
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </form>
         <x-slot:footer>

@@ -13,11 +13,13 @@
             @endinteract
             @interact('column_action', $row)
             <div class="flex gap-1">
+                <x-button.circle icon="eye" wire:click="$dispatch('view::console', {id: {{ $row->id }} })" />
                 <x-button.circle icon="pencil" wire:click="$dispatch('load::console', { 'console' : '{{ $row->id }}'})" />
                 <livewire:admin.console.delete :console="$row" :key="uniqid('', true)" @deleted="$refresh" />
             </div>
             @endinteract
         </x-table>
     </x-card>
+    <livewire:admin.console.view />
     <livewire:admin.console.update @updated="$refresh" />
 </div>

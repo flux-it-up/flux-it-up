@@ -19,6 +19,7 @@ class Update extends Component
     public ?Console $console;
     public $image, $newImage, $years;
     public $brands;
+    public $specifications = [];
     
     public bool $modal = false;
     
@@ -29,7 +30,6 @@ class Update extends Component
 
     public function mount()
     {
-        $this->years = range(date('Y'),1970);
         $this->brands = ConsoleBrand::all();
     }
 
@@ -38,6 +38,8 @@ class Update extends Component
     {
         $this->console = $console;
         $this->image = $this->console->image;
+
+        $this->loadSpecifications($this->console->specifications);
 
         $this->modal = true;
     }
@@ -55,31 +57,93 @@ class Update extends Component
                 'string',
                 'max:255'
             ],
-            'console.model_number' => [
-                'required',
-                'string',
-                'max:255'
-            ],
-            'console.release_year' => [
-                'required',
-                'integer',
-                'digits:4'
-            ],
             'newImage' => [
                 'nullable',
                 'image',
                 'max:2048' // 2MB
             ],
-            'console.specifications' => [
-                'nullable',
-                'json'
-            ]
+            'specifications.*.name' => ['required_with:specifications.*.svalue|string|max:255'],
+            'specifications.*.svalue' => ['required_with:specifications.*.name|string|max:255'],
         ];
+    }
+
+    public function loadSpecifications($specificationsJson)
+    {
+        $this->specifications = [];
+        if ($specificationsJson && is_array($specificationsJson)) {
+            foreach ($specificationsJson as $name => $value) {
+                $this->specifications[] = [
+                    'name' => $name,
+                    'svalue' => $value
+                ];
+            }
+        }
+        
+        // Always have at least one empty row
+        if (empty($this->specifications)) {
+            $this->specifications[] = ['name' => '', 'svalue' => ''];
+        }
+    }
+
+    public function addSpecificationsRow()
+    {
+        $this->specifications[] = ['name' => '', 'svalue' => ''];
+    }
+
+    public function removeSpecificationsRow($index)
+    {
+        if (count($this->specifications) >= 1) {
+            unset($this->specifications[$index]);
+            $this->specifications = array_values($this->specifications);
+        }
+        if (count($this->specifications) == 0) {
+            $this->specifications[] = ['name' => '', 'svalue' => ''];
+        }
+    }
+
+    private function cleanSpecifications()
+    {
+        $this->specifications = collect($this->specifications)
+            ->map(function ($spec) {
+                return [
+                    'name' => isset($spec['name']) ? (string) $spec['name'] : '',
+                    'svalue' => isset($spec['svalue']) ? (string) $spec['svalue'] : '',
+                ];
+            })
+            ->values()
+            ->toArray();
+    }
+
+    private function transformSpecifications()
+    {
+        return collect($this->specifications)
+            ->filter(function ($spec) {
+                return !empty($spec['name']) && !empty($spec['svalue']);
+            })
+            ->mapWithKeys(function ($spec) {
+                $value = $spec['svalue'];
+                
+                // Convert string representations to proper types
+                if ($value === 'true') $value = true;
+                elseif ($value === 'false') $value = false;
+                elseif (is_numeric($value)) {
+                    $value = str_contains($value, '.') ? (float)$value : (int)$value;
+                }
+                
+                return [$spec['name'] => $value];
+            })
+            ->toArray();
     }
 
     public function save(): void 
     {
+        $this->cleanSpecifications();
+        
         $this->validate();
+
+        $transformedSpecs = $this->transformSpecifications();
+
+        $this->console->specifications = $transformedSpecs;
 
         if($this->newImage) {
             if($this->image)
@@ -95,7 +159,7 @@ class Update extends Component
 
         $this->dispatch('updated');
 
-        $this->resetExcept('console','years');
+        $this->resetExcept('console','years','brands');
 
         $this->toast()->success('Console updated successfully!')->send();
     }
