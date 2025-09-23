@@ -156,10 +156,10 @@
                         <x-button href="#" color="primary" class="w-full" icon="clock">
                             View Pending Orders
                         </x-button>
-                        <x-button href="#" color="secondary" class="w-full" icon="users">
+                        <x-button href="{{ route('users.index') }}" color="secondary" class="w-full" icon="users">
                             Manage Customers
                         </x-button>
-                        <x-button href="#" color="slate" class="w-full" icon="cube">
+                        <x-button href="{{ route('adjustments.index') }}" color="slate" class="w-full" icon="cube">
                             Check Inventory
                         </x-button>
                         <x-button href="#" color="emerald" class="w-full" icon="chart-bar">

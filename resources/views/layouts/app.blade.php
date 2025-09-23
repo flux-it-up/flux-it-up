@@ -63,18 +63,17 @@
                         <img src="{{ asset('/assets/images/fluxituplogosmall.png') }}" width="40" height="40" />
                     </div>
                 </x-slot:brand>
-                <x-side-bar.separator text="{{ __('General Navigation') }}" line />
+                <x-side-bar.separator text="{{ __('General') }}" line />
                 @hasrole('customer')
                     <x-side-bar.item text="{{ __('Home Page') }}" icon="arrow-uturn-left" :route="route('welcome')" />
-                    <x-side-bar.item text="{{ __('My Orders') }}" icon="clipboard-document-list" :route="route('welcome')" />
-                @endhasrole
-                @hasrole('technician|support|manager|admin|super-admin')
-                    <x-side-bar.separator text="{{ __('Administration') }}" line />
                     @can('view dashboard')
                         <x-side-bar.item text="{{ __('Dashboard') }}" icon="home" :route="route('dashboard')" />
                     @endcan
+                @endhasrole
+                @hasrole('technician|support|manager|admin|super-admin')
+                    <x-side-bar.separator text="{{ __('Administration') }}" line />
                     @can('view users')
-                        <x-side-bar.item text="{{ __('Users') }}" icon="users" :route="route('users.index')" />
+                        <x-side-bar.item text="{{ __('User Management') }}" icon="users" :route="route('users.index')" />
                     @endcan
 
                         <x-side-bar.item text="{{ __('Tax Rates') }}" icon="scale" :route="route('taxrates.state')" />
@@ -86,17 +85,21 @@
                     {{-- @can('view dashboard')
                         <x-side-bar.item text="{{ __('Pricing Tiers') }}" icon="tag" :route="route('pricing-tiers.index')" /> 
                     @endcan--}}
-                    @can('view products')
-                        <x-side-bar.item text="{{ __('Products') }}" icon="list-bullet" :route="route('products.index')" />
-                    @endcan
-                    @can('view products')
-                        <x-side-bar.item text="{{ __('Inventory') }}" icon="table-cells" :route="route('inventory.index')" />
+                    @can('manage inventory')
+                        <x-side-bar.item text="{{ __('Inventory Management') }}" icon="table-cells" >
+                            @can('view products')
+                                <x-side-bar.item text="{{ __('Products') }}" :route="route('products.index')" />
+                            @endcan
+                            @can('view products')
+                                <x-side-bar.item text="{{ __('Adjustments') }}" :route="route('adjustments.index')" />
+                            @endcan
+                        </x-side-bar.item>
                     @endcan
                     @can('view orders')
-                        <x-side-bar.item text="{{ __('Orders') }}" icon="clipboard-document-list" :route="route('orders.index')" />
-                    @endcan
-                    @can('view dashboard')
-                        <x-side-bar.item text="{{ __('Repair Requests') }}" icon="wrench-screwdriver" :route="route('repairs.index')" />
+                        <x-side-bar.item text="{{ __('Order Management') }}" icon="clipboard-document-list" >
+                            <x-side-bar.item text="{{ __('Product Orders') }}" :route="route('orders.index')" />
+                            <x-side-bar.item text="{{ __('Repair Orders') }}" :route="route('repairs.index')" />
+                        </x-side-bar.item>
                     @endcan
                 @endhasrole
             </x-side-bar>

@@ -48,17 +48,19 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('pricingtiers')->group(function() {
             Route::get('/', PricingTierIndex::class)->name('pricing-tiers.index');
         });
-        Route::prefix('invproducts')->group(function() {
-            Route::get('/', ProductIndex::class)->name('products.index');
-            Route::get('/images/{product}', ProductImages::class)->name('product.images');
-        });
         Route::prefix('inventory')->group(function() {
-            Route::get('/', InventoryIndex::class)->name('inventory.index');
+            Route::prefix('products')->group(function() {
+                Route::get('/', ProductIndex::class)->name('products.index');
+                Route::get('/images/{product}', ProductImages::class)->name('product.images');
+            });
+            Route::prefix('adjustments')->group(function() {
+                Route::get('/', InventoryIndex::class)->name('adjustments.index');
+            });
         });
         Route::prefix('orders')->group(function() {
             Route::get('/', OrderIndex::class)->name('orders.index');
         });
-        Route::prefix('repair-requests')->group(function() {
+        Route::prefix('repairs')->group(function() {
             Route::get('/', RepairIndex::class)->name('repairs.index');
         });
         

@@ -13,7 +13,7 @@
             @interact('column_action', $row)
                 <div class="flex gap-1">
                     <x-button.circle icon="arrows-up-down" wire:click="$dispatch('load::inventory', {'id':'{{ $row->id }}','product':'{{ $row->product->name }}'})" /> <!--x-tooltip.raw="Adjust inventory"-->
-                    <x-button.circle icon="eye" wire:click="$dispatch('load::transactions', {'id':'{{ $row->product->id }}','product':'{{ $row->product->name }}'})" />
+                    <x-button.circle icon="numbered-list" wire:click="$dispatch('load::transactions', {'id':'{{ $row->product->id }}','product':'{{ $row->product->name }}'})" />
                 </div>
             @endinteract
         </x-table>

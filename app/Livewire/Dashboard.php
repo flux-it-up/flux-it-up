@@ -22,12 +22,14 @@ class Dashboard extends Component
 {
     use Alert, Interactions, WithPagination;
 
+    public User $user;
     public $stats = [];
     public $recentOrders = [];
     public $notifications = [];
 
     public function mount()
     {
+        $this->user = Auth::user();
         $this->loadStats();
         $this->loadRecentOrders();
         $this->loadNotifications();
@@ -35,9 +37,7 @@ class Dashboard extends Component
 
     public function loadStats()
     {
-        $user = Auth::user();
-
-        if(auth()->user()->hasAnyRole(['admin', 'super-admin', 'technician', 'support', 'manager'])) {
+        if($this->user->hasAnyRole(['admin', 'super-admin', 'technician', 'support', 'manager'])) {
             $this->stats = [
                 'total_orders' => Repair::count(),
                 'pending_orders' => Repair::where('repair_status','pending')->count(),
@@ -47,28 +47,26 @@ class Dashboard extends Component
             ];
         } else {
             $this->stats = [
-                'my_orders' => Repair::where('user_id', $user->id)->count(),
-                'pending_repairs' => Repair::where('user_id', $user->id)->whereIn('repair_status',['pending','in_progress'])->count(),
-                'completed_repairs' => Repair::where('user_id', $user->id)->where('repair_status','completed')->count(),
-                'total_spent' => Repair::where('user_id', $user->id)->where('repair_status','completed')->sum('total_cost'),
+                'my_orders' => Repair::where('user_id', $this->user->id)->count(),
+                'pending_repairs' => Repair::where('user_id', $this->user->id)->whereIn('repair_status',['pending','in_progress'])->count(),
+                'completed_repairs' => Repair::where('user_id', $this->user->id)->where('repair_status','completed')->count(),
+                'total_spent' => Repair::where('user_id', $this->user->id)->where('repair_status','completed')->sum('total_cost'),
             ];
         }
     }
 
     public function loadRecentOrders()
     {
-        $user = Auth::user();
-
-        if(auth()->user()->hasAnyRole(['admin', 'super-admin', 'technician', 'support', 'manager'])) {
+        if($this->user->hasAnyRole(['admin', 'super-admin', 'technician', 'support', 'manager'])) {
             $this->recentOrders = Repair::with(['user','console'])->latest()->take(5)->get();
         } else {
-            $this->recentOrders = Repair::with('console')->where('user_id',$user->id)->latest()->take(5)->get();
+            $this->recentOrders = Repair::with('console')->where('user_id',$this->user->id)->latest()->take(5)->get();
         }
     }
 
     public function loadNotifications()
     {
-        if(auth()->user()->hasAnyRole(['admin', 'super-admin', 'technician', 'support', 'manager'])) {
+        if($this->user->hasAnyRole(['admin', 'super-admin', 'technician', 'support', 'manager'])) {
             $this->notifications = [
                 'New orders awaiting confirmation',
                 'Low inventory alerts',
