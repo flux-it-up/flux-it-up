@@ -9,10 +9,14 @@ use Illuminate\Support\Carbon;
 
 class Notification extends DatabaseNotification
 {
+    protected $table = 'notifications';
+
     protected $fillable = [
         'id',
         'type',
         'title',
+        'level',
+        'priority',
         'icon',
         'color',
         'notifiable_type',
@@ -27,6 +31,27 @@ class Notification extends DatabaseNotification
         'data' => 'array',
         'read_at' => 'datetime',
     ];
+
+    //Override the newFromBuilder method to handle custom columns
+    public function newFromBuilder($attributes = [], $connection = [])
+    {
+        // Call parent first
+        $model = parent::newFromBuilder($attributes, $connection);
+        
+        // Convert attributes to array if it's an object
+        $attrs = is_object($attributes) ? (array) $attributes : $attributes;
+        
+        // Set custom attributes if they exist
+        $customAttributes = ['title', 'icon', 'color', 'level', 'priority', 'action_url', 'action_text'];
+        
+        foreach ($customAttributes as $attr) {
+            if (isset($attrs[$attr])) {
+                $model->setAttribute($attr, $attrs[$attr]);
+            }
+        }
+        
+        return $model;
+    }
 
     #[Scope]
     public function byColor(Builder $query, string $color): void
@@ -55,7 +80,7 @@ class Notification extends DatabaseNotification
     #[Scope]
     public function highPriority(Builder $query): void
     {
-        $query->whereJsonContains('data->priority', 'high');
+        $query->where('priority', 'high');
     }
 
     #[Scope]
@@ -91,7 +116,7 @@ class Notification extends DatabaseNotification
     #[Scope]
     public function priority(Builder $query, string $level): void
     {
-        $query->whereJsonContains('data->priority', $level);
+        $query->where('priority', $level);
     }
 
     #[Scope]
@@ -116,7 +141,7 @@ class Notification extends DatabaseNotification
     public function needsAttention(Builder $query): void
     {
         $query->whereNull('read_at')
-            ->whereJsonContains('data->priority', 'high');
+            ->where('priority', 'high');
     }
 
     #[Scope]

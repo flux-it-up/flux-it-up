@@ -20,7 +20,6 @@
                     <x-button 
                         wire:click="markAllAsRead"
                         size="sm"
-                        outline
                     >
                         Mark All Read
                     </x-button>
@@ -30,28 +29,24 @@
 
         <div class="space-y-4">
             @forelse($notifications as $notification)
-                <div class="flex items-start space-x-4 p-4 rounded-lg border {{ $notification->read_at ? 'bg-white' : 'bg-blue-50 border-blue-200' }}">
+                <div class="flex items-start space-x-4 p-4 border-t border-b border-primary-600 {{ $notification->read_at ? 'bg-dark-700' : 'bg-dark-800' }}">
                     <!-- Icon -->
-                    <div class="flex-shrink-0">
-                        <div class="w-10 h-10 rounded-full bg-{{ $notification->data['color'] ?? 'blue' }}-100 flex items-center justify-center">
-                            <x-icon 
-                                name="{{ $notification->data['icon'] ?? 'bell' }}" 
-                                class="w-5 h-5 text-{{ $notification->data['color'] ?? 'blue' }}-600"
-                            />
-                        </div>
-                    </div>
+                    <x-icon 
+                        name="{{ $notification->data['icon'] ?? 'bell' }}" 
+                        class="w-8 h-8 text-{{ $notification->data['color'] ?? 'blue' }}-600"
+                    />
 
                     <!-- Content -->
                     <div class="flex-1 min-w-0">
                         <div class="flex items-start justify-between">
                             <div>
-                                <h3 class="text-sm font-medium text-gray-900">
+                                <h3 class="text-md font-bold text-dark-300">
                                     {{ $notification->data['title'] ?? 'Notification' }}
                                 </h3>
-                                <p class="text-sm text-gray-600 mt-1">
+                                <p class="text-sm text-dark-500 mt-1">
                                     {{ $notification->data['message'] ?? '' }}
                                 </p>
-                                <p class="text-xs text-gray-500 mt-2">
+                                <p class="text-xs text-dark-400 mt-2">
                                     {{ $notification->created_at->format('M j, Y g:i A') }}
                                 </p>
                             </div>
@@ -63,7 +58,6 @@
                                         href="{{ $notification->data['action_url'] }}"
                                         size="sm"
                                         color="primary"
-                                        outline
                                     >
                                         {{ $notification->data['action_text'] ?? 'View' }}
                                     </x-button>
@@ -74,7 +68,6 @@
                                         wire:click="markAsRead('{{ $notification->id }}')"
                                         size="sm"
                                         color="gray"
-                                        outline
                                     >
                                         Mark Read
                                     </x-button>
@@ -84,10 +77,9 @@
                                     wire:click="deleteNotification('{{ $notification->id }}')"
                                     size="sm"
                                     color="red"
-                                    outline
                                     wire:confirm="Are you sure you want to delete this notification?"
                                 >
-                                    <x-icon name="trash" class="w-4 h-4" />
+                                    <x-icon name="trash" class="w-5 h-5" />
                                 </x-button>
                             </div>
                         </div>

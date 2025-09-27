@@ -2,7 +2,7 @@
     <!-- Bell Icon -->
     <button 
         @click="open = !open"
-        class="relative p-2 text-primary-500 hover:text-dark-700 focus:none square"
+        class="relative p-2 text-primary-500 cursor-pointer hover:text-dark-700 focus:none square"
     >
         <x-icon name="bell" class="w-6 h-6" />
         
@@ -22,7 +22,7 @@
     >
         <!-- Header -->
         <div class="flex items-center justify-between p-4 border-b border-dark-600">
-            <h3 class="text-lg font-semibold">Notifications</h3>
+            <h3 class="text-lg font-semibold text-primary-600">Notifications</h3>
             @if($unreadCount > 0)
                 <button 
                     wire:click="markAllAsRead"
@@ -37,7 +37,7 @@
         <div class="max-h-96 overflow-y-auto">
             @forelse($notifications as $notification)
                 <div 
-                    class="p-4 border-b border-gray-100 hover:bg-gray-50 {{ !$notification['read_at'] ? 'bg-blue-50' : '' }}"
+                    class="p-4 border-b border-dark-600 hover:bg-dark-800 {{ !$notification['read_at'] ? 'bg-dark-900' : '' }}"
                     wire:click="markAsRead('{{ $notification['id'] }}')"
                 >
                     <div class="flex items-start space-x-3">
@@ -50,20 +50,20 @@
                         
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center justify-between">
-                                <p class="text-sm font-medium text-gray-900">
+                                <p class="text-sm font-medium text-dark-500">
                                     {{ $notification['title'] }}
                                 </p>
                                 @if(!$notification['read_at'])
-                                    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                    <div class="w-2 h-2 bg-{{ $notification['color'] }}-500 rounded-full"></div>
                                 @endif
                             </div>
                             
-                            <p class="text-sm text-gray-600 mt-1">
+                            <p class="text-sm text-dark-400 mt-1">
                                 {{ $notification['message'] }}
                             </p>
                             
                             <div class="flex items-center justify-between mt-2">
-                                <span class="text-xs text-gray-500">
+                                <span class="text-xs text-dark-500">
                                     {{ $notification['created_at'] }}
                                 </span>
                                 
@@ -81,7 +81,7 @@
                     </div>
                 </div>
             @empty
-                <div class="p-8 text-center text-gray-500">
+                <div class="p-8 text-center text-dark-500">
                     <x-icon name="bell-slash" class="w-12 h-12 mx-auto mb-4 text-gray-300" />
                     <p>No notifications yet</p>
                 </div>
@@ -90,10 +90,10 @@
 
         <!-- Footer -->
         @if(count($notifications) > 0)
-            <div class="p-4 border-t border-gray-200">
+            <div class="p-4 border-t border-dark-600">
                 <a 
                     href="{{ route('notifications.index') }}"
-                    class="block text-center text-sm text-blue-600 hover:text-blue-800"
+                    class="block text-center text-sm text-primary-600 hover:text-dark-900"
                     @click="open = false"
                 >
                     View all notifications

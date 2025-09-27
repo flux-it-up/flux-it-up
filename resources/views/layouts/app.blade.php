@@ -44,7 +44,7 @@
                         <x-slot:action>
                             @can('manage profile')
                             <div>
-                                <button class="text-primary-500 cursor-pointer" x-on:click="show = !show">
+                                <button class="text-primary-500 cursor-pointer hover:text-dark-700 focus:none" x-on:click="show = !show">
                                     <x-icon class="h-6 w-6" name="cog">
                                         <x-slot:right>
                                             Settings

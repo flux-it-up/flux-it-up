@@ -37,7 +37,7 @@ class BaseNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['database','mail', 'broadcast'];
+        return ['fiu_database','mail', 'broadcast'];
     }
 
     /**

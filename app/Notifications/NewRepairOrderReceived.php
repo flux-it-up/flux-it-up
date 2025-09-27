@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\RepairRequest;
+use Illuminate\Support\Facades\Log;
 
 class NewRepairOrderReceived extends Notification
 {
@@ -27,7 +28,7 @@ class NewRepairOrderReceived extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['fiu_database'];
     }
 
     /**
@@ -35,19 +36,43 @@ class NewRepairOrderReceived extends Notification
      */
     public function toDatabase(object $notifiable): array
     {
-        return [
-            'title' => 'New Repair Order Received',
-            'message' => 'New repair request for '.$this->repairRequest->console->brand->name.''.$this->repairRequest->console->model.' from '.$this->repairRequest->user->name,
-            'icon' => 'plus-circle',
-            'color' => 'blue',
-            'action_url' => route('admin.repairs.show', $this->repairRequest->id),
-            'action_text' => 'View Repair Order',
-            'data' => [
-                'order_id' => $this->repairRequest->order->id,
-                'order_number' => $this->repairRequest->order->order_number,
-                'customer_name' => $this->repairRequest->user->name,
-            ]
-        ];
+         try {
+            // Safely get brand name
+            $brandName = $this->repairRequest->console?->brand?->name ?? 'Unknown Brand';
+            $model = $this->repairRequest->console?->model ?? 'Unknown Model';
+            $customerName = $this->repairRequest->user?->name ?? 'Unknown Customer';
+            
+            $data = [
+                'title' => 'New Repair Order Received',
+                
+                'icon' => 'plus-circle',
+                'color' => 'blue',
+                'action_url' => route('admin.repairs.show', $this->repairRequest->id),
+                'action_text' => 'View Repair Order',
+                'data' => [
+                    'message' => "New repair request for {$brandName} {$model} from {$customerName}",
+                    'order_id' => $this->repairRequest->order?->id,
+                    'order_number' => $this->repairRequest->order?->order_number,
+                    'customer_name' => $customerName,
+                ]
+            ];
+
+            return $data;
+
+        } catch (\Exception $e) {
+            Log::error('Error in notification toDatabase', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            // Return minimal data if there's an error
+            return [
+                'title' => 'New Repair Order Received',
+                'message' => 'A new repair request has been submitted',
+                'icon' => 'plus-circle',
+                'color' => 'blue',
+            ];
+        }
     }
 
     /**
