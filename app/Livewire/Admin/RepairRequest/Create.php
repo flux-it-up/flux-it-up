@@ -21,7 +21,7 @@ class Create extends Component
     public $users, $consoles, $technicians;
     public $services = [];
     public $selectedConsole = '';
-    public $selectedService = '';
+    public $selectedServices = [];
     public $servicePrice = 0;
 
     public bool $modal = false;
@@ -43,24 +43,14 @@ class Create extends Component
                 $query->where('console_id', $this->selectedConsole);
             })->get();
         }
-        $this->selectedService = '';
+        $this->selectedServices = [];
         $this->servicePrice = 0;
-    }
-
-    public function updatedSelectedService()
-    {
-        if($this->selectedService) {
-            $service = Service::find($this->selectedService);
-            $pivot = $service->consoles()->where('console_id', $this->selectedConsole)->first()->pivot;
-            $servicePriceAdj = $pivot->price_adjustment;
-            $this->servicePrice = $service->base_price + $servicePriceAdj;
-        }
     }
 
     protected $rules = [
         'repair.user_id' => 'required|exists:users,id',
         'selectedConsole' => 'required|exists:consoles,id',
-        'selectedService' => 'required|exists:services,id',
+        'selectedServices' => 'required|array|min:1',
         'repair.console_serial_number' => 'nullable|string|max:100',
         'repair.issue_description' => 'required|string|min:10|max:1000',
         'repair.customer_notes' => 'nullable|string|max:500',
@@ -73,7 +63,18 @@ class Create extends Component
 
     public function save()
     {
-        $this->validate();
+        try {
+            $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            logger()->error('Validation failed: '.$e->getMessage());
+        }
+
+        foreach($this->selectedServices as $serviceId) {
+            $service = Service::find($serviceId);
+            if($service) {
+                $this->servicePrice += $service->price;
+            }
+        }
 
         $order = Order::create([
             'user_id' => $this->repair->user_id,
@@ -88,7 +89,6 @@ class Create extends Component
         $this->repair->order_id = $order->id;
         $this->repair->user_id = $this->repair->user_id;
         $this->repair->console_id = $this->selectedConsole;
-        $this->repair->service_id = $this->selectedService;
         $this->repair->console_serial_number = $this->repair->console_serial_number;
         $this->repair->issue_description = $this->repair->issue_description;
         $this->repair->customer_notes = $this->repair->customer_notes;
@@ -102,12 +102,14 @@ class Create extends Component
         
         $this->repair->save();
         
+        foreach($this->selectedServices as $serviceId) {
+            $this->repair->services()->attach($serviceId);
+        }
+        
         $this->dispatch('created');
+        $this->dispatch('notification-sent');
 
-        $this->selectedConsole = '';
-        $this->selectedService = '';
-
-        $this->resetExcept('consoles','users','selectedConsole','selectedService');
+        $this->resetExcept('consoles','users','technicians');
         $this->repair = new RepairRequest();
 
         $this->toast()->success('Repair Request created successfully!')->send();

@@ -81,6 +81,17 @@ class Dashboard extends Component
         }
     }
 
+    public function getStatusColor($status)
+    {
+        return match($status) {
+            'pending' => 'yellow',
+            'in_progress' => 'blue',
+            'completed' => 'green',
+            'cancelled' => 'red',
+            default => 'gray',
+        };
+    }
+
     public function render()
     {
         return view('livewire.dashboard');

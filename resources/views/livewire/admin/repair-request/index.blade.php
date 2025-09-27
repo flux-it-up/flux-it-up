@@ -15,7 +15,11 @@
                 {{ $row->console->name }}
             @endinteract
             @interact('column_service', $row)
-                {{ $row->service->name }}
+                @if($row->services)
+                    {{ $row->services->pluck('name')->join(', ') }}
+                @else
+                    No Service Specified
+                @endif
             @endinteract
             @interact('column_repair_status', $row)
               @php

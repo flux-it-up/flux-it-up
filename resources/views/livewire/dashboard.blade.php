@@ -21,7 +21,7 @@
     </div>
 
     {{-- Stats Cards --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @hasanyrole('super-admin|admin|manager|support|technician')
             <x-stats-card 
                 title="Total Orders" 
@@ -106,7 +106,7 @@
                             <div class="flex items-center space-x-4">
                                 <div class="flex-shrink-0">
                                     <x-icon 
-                                        name="{{ $this->getConsoleIcon($order->console->type) }}" 
+                                        name="shopping-bag" 
                                         class="w-8 h-8 text-gray-600 dark:text-gray-400"
                                     />
                                 </div>
@@ -116,9 +116,9 @@
                                     </p>
                                     <p class="text-sm text-gray-600 dark:text-gray-400">
                                         Order #{{ $order->id }} • {{ $order->created_at->format('M d, Y') }}
-                                        @if($userRole === 'admin')
+                                        @hasanyrole('super-admin|admin|manager|support|technician')
                                             • {{ $order->user->name }}
-                                        @endif
+                                        @endhasanyrole
                                     </p>
                                 </div>
                             </div>

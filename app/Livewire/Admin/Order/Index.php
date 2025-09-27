@@ -46,7 +46,7 @@ class Index extends Component
     public function rows(): LengthAwarePaginator
     {
         return Order::query()
-            ->with('items','user')
+            ->with('user')
             ->when(
                 $this->search !== null, 
                 fn (Builder $query) => $query

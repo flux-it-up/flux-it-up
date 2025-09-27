@@ -16,16 +16,24 @@ use App\Livewire\Admin\RepairRequest\Index as RepairIndex;
 use App\Livewire\Admin\TaxRates\State as StateIndex;
 use App\Livewire\Admin\TaxRates\County as CountyIndex;
 use App\Livewire\Admin\TaxRates\City as CityIndex;
+use App\Livewire\Customer\Orders\Show as OrderShow;
 use App\Livewire\Frontend\Home;
 use App\Livewire\Frontend\About;
 use App\Livewire\Frontend\Services;
 use App\Livewire\Frontend\Products\Index as ProductsIndex;
 use App\Livewire\Frontend\Products\CategoryPage as ProductsCategory;
 use App\Livewire\Frontend\Products\ProductPage;
+use App\Livewire\NotificationCenter;
 
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', Profile::class)->name('profile.index');
+    Route::get('/notifications', NotificationCenter::class)->name('notifications.index');
+    Route::prefix('customer')->group(function() {
+        Route::prefix('orders')->group(function() {
+            Route::get('/', OrderShow::class)->name('customer.orders.show');
+        });
+    });
 
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
@@ -62,8 +70,8 @@ Route::middleware(['auth'])->group(function () {
         });
         Route::prefix('repairs')->group(function() {
             Route::get('/', RepairIndex::class)->name('repairs.index');
+            Route::get('/{repairRequest}', RepairIndex::class)->name('admin.repairs.show');
         });
-        
     });
 });
 

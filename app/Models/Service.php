@@ -79,4 +79,9 @@ class Service extends Model
     {
         return $query->whereHas('category', fn($q) => $q->whereIn('category_id', $category));
     }
+
+    public function repairRequests()
+    {
+        return $this->belongsToMany(RepairRequest::class, 'repair_request_service', 'service_id', 'repair_request_id');
+    }
 }

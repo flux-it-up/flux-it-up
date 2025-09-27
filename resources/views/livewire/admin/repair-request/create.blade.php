@@ -10,7 +10,7 @@
                 <x-select.styled label="{{ __('Console') }} *" placeholder="Choose console..." wire:model.live="selectedConsole" search :options="$consoles" select="label:name|value:id" />
             </div>
             <div>
-                <x-select.styled label="{{ __('Service') }} *" placeholder="Choose service..." wire:model.live="selectedService" search :options="$services" select="label:name|value:id" />
+                <x-select.styled label="{{ __('Services') }} *" placeholder="Choose service..." wire:model.live="selectedServices" search multiple :options="$services" select="label:name|value:id" />
             </div>
             <div>
                 <x-input label="{{ __('Console Serial Number') }} *" wire:model="repair.console_serial_number" required />

@@ -10,6 +10,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
+use App\Models\Notification;
 
 /**
  * @property string $name
@@ -62,9 +64,11 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute()
     {
-        return $this->avatar
-            ? Storage::disk('public')->url($this->avatar)
-            : Storage::disk('public')->url('avatars/profile_avatar_placeholder.png');
+         return Cache::remember("user_avatar_{$this->id}", 3600, function () {
+            return $this->avatar && Storage::disk('public')->exists($this->avatar)
+                ? Storage::disk('public')->url($this->avatar)
+                : Storage::disk('public')->url('avatars/profile_avatar_placeholder.png');
+        });
     }
 
     public function getNameAttribute()
@@ -129,5 +133,18 @@ class User extends Authenticatable
     public function transactions()
     {
         return $this->hasMany(InventoryTransaction::class);
+    }
+
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'notifiable')
+            ->orderBy('created_at', 'desc');
+    }
+
+    public function unreadNotifications()
+    {
+        return $this->morphMany(Notification::class, 'notifiable')
+            ->whereNull('read_at')
+            ->orderBy('created_at', 'desc');
     }
 }

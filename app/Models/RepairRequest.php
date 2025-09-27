@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Notifications\NewRepairOrderReceived;
+use App\Notifications\OrderStatusUpdated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,6 +29,28 @@ class RepairRequest extends Model
         'total_cost' => 'decimal:2',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($repairRequest) {
+            // Notify customer
+            $repairRequest->user->notify(new OrderStatusUpdated($repairRequest->order));
+
+            // Notify admins
+            $admins = User::role(['super-admin','admin'])->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewRepairOrderReceived($repairRequest));
+            }
+        });
+
+        static::updated(function ($repairRequest) {
+            if($repairRequest->order->wasChanged('order_status')) {
+                $repairRequest->user->notify(new OrderStatusUpdated($repairRequest));
+            }
+        });
+    }
+
     public function order()
     {
         return $this->belongsTo(Order::class);
@@ -42,9 +66,9 @@ class RepairRequest extends Model
         return $this->belongsTo(Console::class);
     }
 
-    public function service()
+    public function services()
     {
-        return $this->belongsTo(Service::class);
+        return $this->belongsToMany(Service::class, 'repair_request_service', 'repair_request_id', 'service_id');
     }
 
     public function technician()

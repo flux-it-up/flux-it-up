@@ -13,6 +13,9 @@
         <tallstackui:script />
         @livewireStyles
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @auth
+            <meta name="user-id" content="{{ auth()->id() }}">
+        @endauth
     </head>
     <body class="font-sans antialiased"
           x-cloak
@@ -33,6 +36,10 @@
                     <img src="{{ asset(auth()->user()->avatar_url) }}" class="inline rounded-full size-10 mx-3 " /><span class="text-base font-semibold text-dark-300" x-text="name"></span>
                 </x-slot:middle>
                 <x-slot:right>
+                    <!-- Notification Bell Component -->
+                    @auth
+                        <livewire:notification-bell />
+                    @endauth
                     <x-dropdown>
                         <x-slot:action>
                             @can('manage profile')

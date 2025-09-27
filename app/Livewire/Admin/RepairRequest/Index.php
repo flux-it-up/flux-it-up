@@ -46,7 +46,7 @@ class Index extends Component
     public function rows(): LengthAwarePaginator
     {
         return RepairRequest::query()
-            ->with('order','user','console','service')
+            ->with('order','user','console','services')
             ->when(
                 $this->search !== null, 
                 fn (Builder $query) => $query

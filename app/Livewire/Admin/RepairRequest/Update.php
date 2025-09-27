@@ -120,6 +120,7 @@ class Update extends Component
         $this->repair->save();
         
         $this->dispatch('updated');
+        $this->dispatch('notification-sent');
 
         $this->selectedConsole = '';
         $this->selectedService = '';
