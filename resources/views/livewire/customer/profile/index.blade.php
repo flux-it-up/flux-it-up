@@ -15,7 +15,7 @@
                         @if($user->avatar)
                             <img src="{{ Storage::url($user->avatar) }}" class="mt-4 w-48 h-48 mb-2" />
                         @else
-                            <img src="{{ Storage::url('avatars/profile-avatar-placeholder.png') }}" class="mt-4 w-48 h-48 mb-2" />
+                            <img src="{{ Storage::url('avatars/profile_avatar_placeholder.png') }}" class="mt-4 w-48 h-48 mb-2" />
                         @endif
                     </div>
                     <div class="w-full">

@@ -8,7 +8,7 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=asap:100,300,500&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=abel:100,300,500&display=swap" rel="stylesheet" />
 
         <tallstackui:script />
         @livewireStyles

@@ -10,7 +10,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\Product;
-use App\OrderService;
+use App\Services\OrderService;
 
 class Create extends Component
 {
@@ -74,7 +74,9 @@ class Create extends Component
     {
         $this->validate();
 
-        $orderService = new OrderService($this->order->user_id);
+        $orderService = new OrderService($this->order->user_id, $this->order);
+
+        $orderService->createAdminProductOrder($this->order, $this->products);
 
         $this->dispatch('created');
 

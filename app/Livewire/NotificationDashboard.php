@@ -3,16 +3,15 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Traits\Alert;
 use Livewire\Attributes\Renderless;
 
-class NotificationCenter extends Component
+class NotificationDashboard extends Component
 {
-    use WithPagination, Alert;
+    use Alert;
 
-    public $filter = 'all';
+    public $filter = 'unread';
 
     public function updatedFilter()
     {
@@ -32,32 +31,6 @@ class NotificationCenter extends Component
         Auth::user()->unreadNotifications->markAsRead();
     }
 
-    #[Renderless]
-    public function confirmDelete($notificationId): void
-    {
-        $this->question()
-            ->confirm(method: 'deleteNotification', params: $notificationId)
-            ->cancel()
-            ->send();
-    }
-
-    public function deleteNotification($notificationId)
-    {
-       if(!Auth::check()) {
-            return;
-        }
-
-        $notification = Auth::user()->notifications()
-            ->where('id', $notificationId)
-            ->first();
-
-        if($notification) {
-            $notification->delete();
-            $this->resetPage();
-            $this->toast()->info('Notification deleted')->send();
-        }
-    }
-
     public function render()
     {
         $query = Auth::user()->notifications();
@@ -70,7 +43,7 @@ class NotificationCenter extends Component
 
         $notifications = $query->latest()->paginate(15);
 
-        return view('livewire.notification-center', [
+        return view('livewire.notification-dashboard', [
             'notifications' => $notifications
         ]);
     }

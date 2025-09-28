@@ -45,7 +45,7 @@ class NewRepairOrderReceived extends Notification
             $data = [
                 'title' => 'New Repair Order Received',
                 
-                'icon' => 'plus-circle',
+                'icon' => 'wrench-screwdriver',
                 'color' => 'blue',
                 'action_url' => route('admin.repairs.show', $this->repairRequest->id),
                 'action_text' => 'View Repair Order',

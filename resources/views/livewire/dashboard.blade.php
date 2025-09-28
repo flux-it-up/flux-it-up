@@ -78,9 +78,9 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {{-- Recent Orders --}}
         <div class="lg:col-span-2">
-            <x-card>
+            <x-card color="amber" bordered>
                 <x-slot:header>
-                    <div class="mx-2 flex items-center justify-between">
+                    <div class="p-4 mx-2 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                             @hasanyrole('super-admin|admin|manager|support|technician')
                                 Recent Orders
@@ -92,8 +92,6 @@
                             href="#" 
                             color="primary" 
                             size="sm"
-                            outline
-                            class="my-2"
                         >
                             View All
                         </x-button>
@@ -144,9 +142,9 @@
         {{-- Quick Actions & Notifications --}}
         <div class="space-y-6">
             {{-- Quick Actions --}}
-            <x-card>
+            <x-card color="green" bordered>
                 <x-slot:header>
-                    <h3 class="mx-2 text-lg font-semibold text-gray-900 dark:text-white">
+                    <h3 class="p-4 mx-2 text-lg font-semibold text-gray-900 dark:text-white">
                         Quick Actions
                     </h3>
                 </x-slot:header>
@@ -156,7 +154,7 @@
                         <x-button href="#" color="primary" class="w-full" icon="clock">
                             View Pending Orders
                         </x-button>
-                        <x-button href="{{ route('users.index') }}" color="secondary" class="w-full" icon="users">
+                        <x-button href="{{ route('users.index') }}" color="amber" class="w-full" icon="users">
                             Manage Customers
                         </x-button>
                         <x-button href="{{ route('adjustments.index') }}" color="slate" class="w-full" icon="cube">
@@ -183,32 +181,15 @@
             </x-card>
 
             {{-- Notifications --}}
-            <x-card>
-                <x-slot:header>
-                    <h3 class="mx-2 text-lg font-semibold text-gray-900 dark:text-white">
-                        Notifications
-                    </h3>
-                </x-slot:header>
-
-                <div class="space-y-3">
-                    @foreach($notifications as $notification)
-                        <div class="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                            <x-icon name="bell" class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
-                            <p class="text-sm text-blue-800 dark:text-blue-200">
-                                {{ $notification }}
-                            </p>
-                        </div>
-                    @endforeach
-                </div>
-            </x-card>
+            <livewire:notification-dashboard />
         </div>
     </div>
 
     {{-- Recent Activity (Admin Only) --}}
     @hasanyrole('super-admin|admin|manager|support|technician')
-        <x-card>
+        <x-card color="red" bordered>
             <x-slot:header>
-                <h3 class="mx-2 text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 class="p-4 mx-2 text-lg font-semibold text-gray-900 dark:text-white">
                     Recent Activity
                 </h3>
             </x-slot:header>

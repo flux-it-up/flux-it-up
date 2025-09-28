@@ -1,5 +1,5 @@
-<div class="max-w-4xl mx-auto p-6">
-    <x-card>
+<div class="w-full mx-auto p-6">
+    <x-card color="primary" bordered>
         <x-slot:header>
             <div class="flex p-4 items-center justify-between">
                 <h2 class="text-xl font-semibold">Notification Center</h2>
@@ -53,13 +53,13 @@
 
                             <!-- Actions -->
                             <div class="flex items-center space-x-2 ml-4">
-                                @if($notification->data['action_url'] ?? null)
+                                @if($notification->action_url ?? null)
                                     <x-button 
-                                        href="{{ $notification->data['action_url'] }}"
+                                        href="{{ $notification->action_url }}"
                                         size="sm"
                                         color="primary"
                                     >
-                                        {{ $notification->data['action_text'] ?? 'View' }}
+                                        {{ $notification->action_text ?? 'View' }}
                                     </x-button>
                                 @endif
 
@@ -74,10 +74,10 @@
                                 @endif
 
                                 <x-button 
-                                    wire:click="deleteNotification('{{ $notification->id }}')"
+                                    wire:click="confirmDelete('{{ $notification->id }}')"
                                     size="sm"
                                     color="red"
-                                    wire:confirm="Are you sure you want to delete this notification?"
+                                    wireable
                                 >
                                     <x-icon name="trash" class="w-5 h-5" />
                                 </x-button>
@@ -87,9 +87,9 @@
                 </div>
             @empty
                 <div class="text-center py-12">
-                    <x-icon name="bell-slash" class="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">No notifications</h3>
-                    <p class="text-gray-600">You're all caught up!</p>
+                    <x-icon name="bell-slash" class="w-16 h-16 mx-auto text-dark-300 mb-4" />
+                    <h3 class="text-lg font-medium text-dark-400 mb-2">No notifications</h3>
+                    <p class="text-dark-500">You're all caught up!</p>
                 </div>
             @endforelse
         </div>

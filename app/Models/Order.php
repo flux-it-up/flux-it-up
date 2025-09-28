@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Str;
+use App\Notifications\NewOrderReceived;
+use App\Notifications\OrderStatusUpdated;
 
 class Order extends Model
 {
@@ -53,6 +55,23 @@ class Order extends Model
         static::creating(function($order) {
             $order->order_number = 'ORD-'.now()->format('Ymd').'-'.Str::uuid();
         });
+
+        static::created(function ($order) {
+            // Notifiy Customer
+            $order->user->notify(new OrderStatusUpdated($order));
+
+            // Notify Admins
+            $admins = User::role(['super-admin','admin'])->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewOrderReceived($order));
+            }
+        });
+
+        static::updated(function ($order) {
+            if($order->wasChanged('order_status')) {
+                $order->user->notify(new OrderStatusUpdated($order));
+            }
+        });
     }
 
     public function user()
@@ -62,7 +81,7 @@ class Order extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'order_product', 'order_id', 'product_id')
+        return $this->belongsToMany(Product::class, 'order_product')
             ->withPivot(['quantity']);
     }
 

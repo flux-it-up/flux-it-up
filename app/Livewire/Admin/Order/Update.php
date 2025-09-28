@@ -32,8 +32,8 @@ class Update extends Component
     #[On('load::order')]
     public function load(Order $order): void
     {
-        $this->order = Order::with('items')->findOrFail($order->id);
-        foreach($this->order->items as $item) {
+        $this->order = Order::with('products')->findOrFail($order->id);
+        foreach($this->order->products as $item) {
             $this->products[] = ['id' => $item->product_id,'quantity' => $item->quantity];
         }
 
@@ -80,12 +80,12 @@ class Update extends Component
 
         $this->total = null;
 
-        $this->order->items()->delete();
+        $this->order->products()->delete();
 
         foreach($this->products as $productData) {
             $product = Product::findOrFail($productData['id']);
 
-            $this->order->items()->create([
+            $this->order->products()->create([
                 'order_id' => $this->order->id,
                 'product_id' => $product->id,
                 'quantity' => $productData['quantity'],

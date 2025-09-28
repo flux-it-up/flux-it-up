@@ -23,6 +23,7 @@
             @endinteract
             @interact('column_action', $row)
             <div class="flex gap-1">
+                <x-button.circle icon="eye" wire:click="$dispatch('view::user', {'id': '{{ $row->id }}' })" />
                 <x-button.circle icon="pencil" wire:click="$dispatch('load::user', { 'user' : '{{ $row->id }}'})" />
                 <x-button.circle icon="shield-exclamation" wire:click="$dispatch('assign::user', { 'user' : '{{ $row->id }}'})" />
                 <livewire:admin.users.delete :user="$row" :key="uniqid('', true)" @deleted="$refresh" />
@@ -32,5 +33,6 @@
     </x-card>
 
     <livewire:admin.users.update @updated="$refresh" />
+    <livewire:admin.users.view />
     <livewire:admin.users.assign-users @assigned="$refresh" />
 </div>

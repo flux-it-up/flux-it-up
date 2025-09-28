@@ -67,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
         });
         Route::prefix('orders')->group(function() {
             Route::get('/', OrderIndex::class)->name('orders.index');
+            Route::get('/{order}', OrderIndex::class)->name('admin.orders.show');
         });
         Route::prefix('repairs')->group(function() {
             Route::get('/', RepairIndex::class)->name('repairs.index');
