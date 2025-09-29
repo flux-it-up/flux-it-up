@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             SalesTaxNexusThresholdsSeeder::class,
             StateSeeder::class,
             CountySeeder::class,
-            CitySeeder::class,
+            //CitySeeder::class,
             ConsoleBrandSeeder::class,
             ConsoleSeeder::class,
             ConsoleModelSeeder::class,

@@ -82,12 +82,19 @@
                     @can('view users')
                         <x-side-bar.item text="{{ __('User Management') }}" icon="users" :route="route('users.index')" />
                     @endcan
-
-                        <x-side-bar.item text="{{ __('Tax Rates') }}" icon="scale" :route="route('taxrates.state')" />
-
+                    <x-side-bar.item text="{{ __('Finance Management') }}" icon="scale" >
+                        <x-side-bar.item text="{{ __('Tax Rates') }}" :route="route('taxrates.state')" />
+                    </x-side-bar.item>
                     @can('manage site')
-                        <x-side-bar.item text="{{ __('Consoles') }}" icon="server" :route="route('consoles.index')" />
-                        <x-side-bar.item text="{{ __('Services') }}" icon="clipboard" :route="route('services.index')" />
+                        <x-side-bar.item text="{{ __('Console Management') }}" icon="server" >
+                            <x-side-bar.item text="{{ __('Brands') }}" :route="route('brands.index')" />
+                            <x-side-bar.item text="{{ __('Models') }}" :route="route('models.index')" />
+                            <x-side-bar.item text="{{ __('Consoles') }}" :route="route('consoles.index')" />
+                        </x-side-bar.item>
+                        <x-side-bar.item text="{{ __('Services Management') }}" icon="clipboard" >
+                            <x-side-bar.item text="{{ __('Services') }}" :route="route('services.index')" />
+                            <x-side-bar.item text="{{ __('Service Categories') }}" :route="route('admin.service.category.index')" />
+                        </x-side-bar.item>
                     @endcan
                     {{-- @can('view dashboard')
                         <x-side-bar.item text="{{ __('Pricing Tiers') }}" icon="tag" :route="route('pricing-tiers.index')" /> 

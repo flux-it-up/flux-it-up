@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Collection;
 use App\Services\UserService;
+use Illuminate\Support\Str;
 
 class OrderService
 {
@@ -22,20 +23,22 @@ class OrderService
         $this->order = $order;
     }
 
-    public function createAdminProductOrder($order, $products = null)
+    public function createAdminProductOrder($products = null)
     {
         //Prepare order data
-        $order->shipping_address_id = $this->user->defaultShippingAddress->id;
-        $order->billing_address_id = $this->user->defaultBillingAddress->id;
-        $order->subtotal = $this->calculateSubtotal($products);
-        $order->tax_amount = $this->calculateTaxes();
-        $order->shipping_amount = $this->calculateShipping();
-        if($this->verifyDiscountCode()){
-            $order->discount_amount = $this->getDiscountAmount();
+        $this->order->order_number = 'ORD-PROD-'.now()->format('Ymd').'-'.Str::uuid();
+        $this->order->shipping_address_id = $this->user->defaultShippingAddress->id;
+        $this->order->billing_address_id = $this->user->defaultBillingAddress->id;
+        $this->order->subtotal = $this->calculateProductSubtotal($products);
+        $this->order->tax_amount = $this->calculateTaxes();
+        $this->order->shipping_amount = $this->calculateShipping();
+        if($this->order->discount_code){
+            $this->order->discount_amount = $this->verifyDiscountCode();
         }
-        $order->paid_amount = $this->getPayments();
-        $order->total_amount = $this->calculateTotal();
-        $order->save();
+        dd($this->order);
+        $this->order->paid_amount = $this->getPayments();
+        $this->order->total_amount = $this->calculateTotal();
+        $this->order->save();
 
         $pivotData = [];
         foreach($products as $product) {
@@ -44,7 +47,12 @@ class OrderService
         $this->order->products()->sync($pivotData);
     }
 
-    public function calculateSubtotal($products = null)
+    public function createAdminRepairOrder($services = null)
+    {
+
+    }
+
+    public function calculateProductSubtotal($products = null)
     {
         $subtotal = 0;
 
@@ -79,12 +87,6 @@ class OrderService
     }
 
     public function verifyDiscountCode()
-    {
-        // Return true for now
-        return true;
-    }
-
-    public function getDiscountAmount()
     {
         // Return 0 for now
         return 0.00;

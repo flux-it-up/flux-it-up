@@ -40,5 +40,89 @@ class AddressSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        
+        Address::factory()->create([
+            'user_id' => '2',
+            'type' => 'shipping',
+            'label' => 'Home',
+            'line1' => '405 Dwain St.',
+            'city' => 'Glenwood',
+            'state' => 'AR',
+            'postal_code' => '71943',
+            'country' => 'United States of America',
+            'is_default' => '1',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        Address::factory()->create([
+            'user_id' => '2',
+            'type' => 'billing',
+            'label' => 'Home',
+            'line1' => '405 Dwain St.',
+            'city' => 'Glenwood',
+            'state' => 'AR',
+            'postal_code' => '71943',
+            'country' => 'United States of America',
+            'is_default' => '1',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        Address::factory()->create([
+            'user_id' => '3',
+            'type' => 'shipping',
+            'label' => 'Home',
+            'line1' => '405 Dwain St.',
+            'city' => 'Glenwood',
+            'state' => 'AR',
+            'postal_code' => '71943',
+            'country' => 'United States of America',
+            'is_default' => '1',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        Address::factory()->create([
+            'user_id' => '3',
+            'type' => 'billing',
+            'label' => 'Home',
+            'line1' => '405 Dwain St.',
+            'city' => 'Glenwood',
+            'state' => 'AR',
+            'postal_code' => '71943',
+            'country' => 'United States of America',
+            'is_default' => '1',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        Address::factory()->create([
+            'user_id' => '4',
+            'type' => 'shipping',
+            'label' => 'Home',
+            'line1' => '405 Dwain St.',
+            'city' => 'Glenwood',
+            'state' => 'AR',
+            'postal_code' => '71943',
+            'country' => 'United States of America',
+            'is_default' => '1',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        Address::factory()->create([
+            'user_id' => '4',
+            'type' => 'billing',
+            'label' => 'Home',
+            'line1' => '405 Dwain St.',
+            'city' => 'Glenwood',
+            'state' => 'AR',
+            'postal_code' => '71943',
+            'country' => 'United States of America',
+            'is_default' => '1',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

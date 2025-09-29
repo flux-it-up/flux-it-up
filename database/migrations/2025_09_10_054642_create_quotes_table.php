@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
-            $table->string('console_type');
+            $table->enum('quote_status',['pending','reviewing','confirmed','denied'])->default('pending');
+            $table->string('console_id');
+            $table->string('model_id');
             $table->text('issue');
             $table->timestamps();
         });

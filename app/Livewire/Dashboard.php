@@ -43,14 +43,14 @@ class Dashboard extends Component
                 'pending_orders' => Repair::where('repair_status','pending')->count(),
                 'completed_orders' => Repair::where('repair_status','completed')->count(),
                 'total_customers' => User::role('customer')->count(),
-                'revenue_this_month' => Repair::where('repair_status','completed')->whereMonth('created_at', now()->month)->sum('total_cost'),
+                'revenue_this_month' => Repair::where('repair_status','completed')->whereMonth('created_at', now()->month)->sum('total_amount'),
             ];
         } else {
             $this->stats = [
                 'my_orders' => Repair::where('user_id', $this->user->id)->count(),
                 'pending_repairs' => Repair::where('user_id', $this->user->id)->whereIn('repair_status',['pending','in_progress'])->count(),
                 'completed_repairs' => Repair::where('user_id', $this->user->id)->where('repair_status','completed')->count(),
-                'total_spent' => Repair::where('user_id', $this->user->id)->where('repair_status','completed')->sum('total_cost'),
+                'total_spent' => Repair::where('user_id', $this->user->id)->where('repair_status','completed')->sum('total_amount'),
             ];
         }
     }

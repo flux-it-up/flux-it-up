@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('order_number')->unique();
-            $table->enum('order_type',['repair','product','mixed']);
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('shipping_address_id')->nullable()->constrained('addresses')->nullOnDelete();
             $table->foreignId('billing_address_id')->nullable()->constrained('addresses')->nullOnDelete();
-            $table->enum('order_status',['pending','confirmed','processing','shipped','delivered','cancelled','refunded'])->default('pending');
+            $table->enum('order_status',['pending','confirmed','processing','completed','shipped','delivered','cancelled','refunded','on_hold','closed'])->default('pending');
             $table->enum('payment_status',['pending','paid','failed','refunded','partial'])->default('pending');
             $table->decimal('subtotal',10,2);
             $table->decimal('tax_amount',10,2)->default(0);

@@ -14,8 +14,15 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('type');
+            $table->string('title')->nullable();
+            $table->string('icon')->nullable();
+            $table->string('color')->default('blue');
+            $table->string('level')->default('info');
+            $table->string('priority')->default('normal');
             $table->morphs('notifiable');
             $table->text('data');
+            $table->string('action_url')->nullable();
+            $table->string('action_text')->nullable();
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });

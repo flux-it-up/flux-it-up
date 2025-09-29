@@ -76,7 +76,7 @@ class Create extends Component
 
         $orderService = new OrderService($this->order->user_id, $this->order);
 
-        $orderService->createAdminProductOrder($this->order, $this->products);
+        $orderService->createAdminProductOrder($this->products);
 
         $this->dispatch('created');
 

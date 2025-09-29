@@ -20,7 +20,7 @@ class ConsoleModel extends Model
         'release_year' => 'integer',
     ];
 
-    public function consoles()
+    public function console()
     {
         return $this->belongsTo(Console::class, 'console_id');
     }

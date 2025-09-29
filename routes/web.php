@@ -5,8 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Dashboard;
 use App\Livewire\Admin\Users\Index as UsersIndex;
 use App\Livewire\Customer\Profile\Index as Profile;
+use App\Livewire\Admin\Brand\Index as BrandIndex;
+use App\Livewire\Admin\Model\Index as ModelIndex;
 use App\Livewire\Admin\Console\Index as ConsoleIndex;
 use App\Livewire\Admin\Service\Index as ServiceIndex;
+use App\Livewire\Admin\Service\Category\Index as ServiceCategoryIndex;
 use App\Livewire\Admin\PricingTier\Index as PricingTierIndex;
 use App\Livewire\Admin\Product\Index as ProductIndex;
 use App\Livewire\Admin\Product\ManageImages as ProductImages;
@@ -47,11 +50,18 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/{county:id}', CityIndex::class)->name('taxrates.city');
             });
         });
+        Route::prefix('brands')->group(function() {
+            Route::get('/', BrandIndex::class)->name('brands.index');
+        });
+        Route::prefix('models')->group(function() {
+            Route::get('/', ModelIndex::class)->name('models.index');
+        });
         Route::prefix('consoles')->group(function() {
             Route::get('/', ConsoleIndex::class)->name('consoles.index');
         });
         Route::prefix('repairservices')->group(function() {
             Route::get('/', ServiceIndex::class)->name('services.index');
+            Route::get('/categories', ServiceCategoryIndex::class)->name('admin.service.category.index');
         });
         Route::prefix('pricingtiers')->group(function() {
             Route::get('/', PricingTierIndex::class)->name('pricing-tiers.index');

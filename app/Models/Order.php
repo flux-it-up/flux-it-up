@@ -52,10 +52,6 @@ class Order extends Model
     {
         parent::boot();
 
-        static::creating(function($order) {
-            $order->order_number = 'ORD-'.now()->format('Ymd').'-'.Str::uuid();
-        });
-
         static::created(function ($order) {
             // Notifiy Customer
             $order->user->notify(new OrderStatusUpdated($order));

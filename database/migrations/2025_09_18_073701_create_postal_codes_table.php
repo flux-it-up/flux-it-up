@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('postal_codes', function (Blueprint $table) {
             $table->id();
-            $table->string('state');
-            $table->string('county');
-            $table->string('city');
+            $table->string('state_id');
+            $table->string('county_id');
+            $table->string('city_id');
             $table->string('postal_code',5);
             $table->timestamps();
         });
